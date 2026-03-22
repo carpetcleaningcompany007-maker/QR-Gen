@@ -472,7 +472,7 @@
       position:relative;
       width:min(100%, 500px);
       margin:0 auto;
-      min-height:830px;
+      min-height:880px;
       border-radius:36px;
       overflow:hidden;
       background:#20324f;
@@ -583,20 +583,20 @@
     .review-title{
       color:#fff;
       font-family:"Playfair Display",serif;
-      font-size:44px;
-      line-height:1.02;
-      letter-spacing:-.03em;
-      margin:8px 0 8px;
-      max-width:380px;
-      text-shadow:0 2px 18px rgba(0,0,0,.22);
+      font-size:48px;
+      line-height:0.98;
+      letter-spacing:-.04em;
+      margin:10px 0 10px;
+      max-width:390px;
+      text-shadow:0 4px 22px rgba(0,0,0,.28);
     }
 
     .review-sub{
-      color:#f0f6ff;
-      font-size:15px;
+      color:#f3f7ff;
+      font-size:16px;
       line-height:1.65;
-      max-width:380px;
-      text-shadow:0 2px 14px rgba(0,0,0,.18);
+      max-width:390px;
+      text-shadow:0 2px 14px rgba(0,0,0,.22);
     }
 
     .review-mid{
@@ -648,35 +648,37 @@
       position:relative;
       z-index:2;
       text-align:center;
-      color:#f5b300;
-      font-size:30px;
+      color:#f5c84c;
+      font-size:34px;
       letter-spacing:3px;
       margin-top:18px;
       text-shadow:0 2px 12px rgba(0,0,0,.18);
+      font-weight:800;
     }
 
     .bottom-copy{
       position:relative;
       z-index:2;
       text-align:center;
-      color:#fff;
-      font-size:15px;
-      line-height:1.62;
-      max-width:360px;
-      margin:12px auto 0;
-      text-shadow:0 2px 14px rgba(0,0,0,.22);
+      color:#ffffff;
+      font-size:16px;
+      line-height:1.55;
+      max-width:370px;
+      margin:10px auto 0;
+      text-shadow:0 2px 14px rgba(0,0,0,.24);
+      font-weight:600;
     }
 
     .contact-pill{
       position:relative;
       z-index:2;
       margin:18px auto 0;
-      max-width:340px;
+      max-width:360px;
       text-align:center;
-      background:rgba(255,255,255,.92);
-      border:1px solid rgba(255,255,255,.72);
+      background:rgba(255,255,255,.95);
+      border:1px solid rgba(255,255,255,.80);
       border-radius:999px;
-      padding:12px 16px;
+      padding:14px 18px;
       color:#153055;
       font-size:15px;
       font-weight:800;
@@ -685,9 +687,14 @@
 
     .preview-actions{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:12px;
       margin-top:16px;
+    }
+
+    .preview-actions.secondary-row{
+      grid-template-columns:1fr;
+      margin-top:12px;
     }
 
     .msg{
@@ -746,9 +753,10 @@
       .hero-card{padding:24px}
       .two,.three,.actions-two,.actions-three,.choice-grid,.stats,.preview-actions{grid-template-columns:1fr}
       .panel-head,.panel-body{padding-left:18px;padding-right:18px}
-      .review-title{font-size:36px}
+      .review-title{font-size:38px}
       .review-qr-card{width:292px}
       .hero-mini{width:220px}
+      .preview-actions.secondary-row{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -800,7 +808,7 @@
         <section class="panel">
           <div class="panel-head">
             <h2>Studio setup</h2>
-            <p>This version auto uses the uploaded logo on the preview and exports.</p>
+            <p>This version auto uses the uploaded logo, adds better wording, text colour options, clickable live buttons and stronger Google review emphasis.</p>
           </div>
           <div class="panel-body">
 
@@ -879,7 +887,7 @@
               </div>
             </div>
 
-            <div class="two">
+            <div class="three">
               <div class="field">
                 <label for="accentColor">Accent colour</label>
                 <select id="accentColor">
@@ -887,6 +895,17 @@
                   <option value="gold">Gold</option>
                   <option value="emerald">Emerald</option>
                   <option value="violet">Violet</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="textColor">Text colour</label>
+                <select id="textColor">
+                  <option value="white" selected>White</option>
+                  <option value="black">Black</option>
+                  <option value="navy">Dark navy</option>
+                  <option value="blue">Blue</option>
+                  <option value="gold">Gold</option>
                 </select>
               </div>
 
@@ -922,8 +941,8 @@
               <span>Logo upload fixed</span>
             </div>
             <div class="stat">
-              <strong>Auto</strong>
-              <span>Uploaded logo used automatically</span>
+              <strong>Better</strong>
+              <span>Clickable live buttons and cleaner wording</span>
             </div>
           </div>
 
@@ -955,16 +974,22 @@
                   </div>
                 </div>
 
-                <div class="stars">★★★★★</div>
+                <div class="stars" id="artStars">★★★★★</div>
                 <div class="bottom-copy" id="artBottomCopy">Your feedback really helps our business and helps other local customers choose us with confidence.</div>
-                <div class="contact-pill" id="artContact">07802563213</div>
+                <div class="contact-pill" id="artCtaButton">Tap below to open our Google review page</div>
+                <div class="contact-pill" id="artContact" style="margin-top:12px;">07802563213</div>
               </div>
             </div>
 
             <div class="preview-actions">
               <button class="btn btn-primary" id="previewGenerateBtn">Generate QR</button>
-              <button class="btn btn-secondary" id="previewCardBtn">Download card</button>
+              <button class="btn btn-secondary" id="openLinkBtn">Open link</button>
+              <button class="btn btn-secondary" id="copyLinkBtn">Copy link</button>
               <button class="btn btn-gold" id="previewLockBtn">Download lock screen</button>
+            </div>
+
+            <div class="preview-actions secondary-row">
+              <button class="btn btn-secondary" id="previewCardBtn">Download card</button>
             </div>
 
             <div class="msg ok" id="actionMsg"></div>
@@ -1007,6 +1032,77 @@
       return map[el("accentColor").value] || map.blue;
     }
 
+    function getTextColors() {
+      const map = {
+        white: {
+          main: "#ffffff",
+          soft: "#eef5ff",
+          shadow: "rgba(0,0,0,.22)"
+        },
+        black: {
+          main: "#111111",
+          soft: "#222222",
+          shadow: "rgba(255,255,255,.08)"
+        },
+        navy: {
+          main: "#153055",
+          soft: "#21456f",
+          shadow: "rgba(255,255,255,.08)"
+        },
+        blue: {
+          main: "#dbe8ff",
+          soft: "#bcd3ff",
+          shadow: "rgba(0,0,0,.18)"
+        },
+        gold: {
+          main: "#ffd76a",
+          soft: "#ffe7a6",
+          shadow: "rgba(0,0,0,.18)"
+        }
+      };
+      return map[el("textColor").value] || map.white;
+    }
+
+    function getTargetMeta() {
+      if (qrTarget === "review") {
+        return {
+          label: "SCAN TO LEAVE A REVIEW",
+          heading: "Thanks for choosing us",
+          sub: "If you were happy with the clean, please scan below or tap the button to leave us a quick Google review.",
+          bottom: "Our 5 star Google reviews really help our business and help other customers choose us with confidence.",
+          cta: "Tap below to open our Google review page"
+        };
+      }
+
+      if (qrTarget === "website") {
+        return {
+          label: "SCAN TO VISIT OUR WEBSITE",
+          heading: "Thanks for visiting us",
+          sub: "Scan below or tap the button to visit our website and find out more about our services.",
+          bottom: "Take a look through our website to see more about our cleaning services and recent work.",
+          cta: "Tap below to open our website"
+        };
+      }
+
+      if (qrTarget === "facebook") {
+        return {
+          label: "SCAN TO VIEW OUR FACEBOOK",
+          heading: "Come and see our latest work",
+          sub: "Scan below or tap the button to visit our Facebook page and see our recent results.",
+          bottom: "Follow our Facebook page to see updates, before and after results and customer feedback.",
+          cta: "Tap below to open our Facebook page"
+        };
+      }
+
+      return {
+        label: "SCAN THE QR CODE",
+        heading: "Thanks for choosing us",
+        sub: "Scan below or tap the button to open the link.",
+        bottom: "Use the QR code or the button below to open the link directly.",
+        cta: "Tap below to open the link"
+      };
+    }
+
     function setTarget(target) {
       qrTarget = target;
       document.querySelectorAll(".choice").forEach(btn => {
@@ -1019,16 +1115,12 @@
       el("customFieldWrap").style.display = target === "custom" ? "" : "none";
 
       updateQrLabel();
+      updateAllPreviewOnly();
     }
 
     function updateQrLabel() {
-      const labels = {
-        review: "SCAN TO LEAVE A REVIEW",
-        website: "SCAN TO VISIT OUR WEBSITE",
-        facebook: "SCAN TO VIEW OUR FACEBOOK",
-        custom: "SCAN THE QR CODE"
-      };
-      el("artQrLabel").textContent = labels[qrTarget] || "SCAN THE QR CODE";
+      const meta = getTargetMeta();
+      el("artQrLabel").textContent = meta.label;
     }
 
     function getQRText() {
@@ -1094,12 +1186,36 @@
     }
 
     function updatePreviewText() {
-      el("artCompanyName").textContent = el("companyName").value.trim() || "Your Company Name";
-      el("artTagline").textContent = el("tagline").value.trim() || "Professional carpet cleaning";
-      el("artHeadline").textContent = el("headlineText").value.trim() || "Thanks for choosing us";
-      el("artSubline").textContent = el("sublineText").value.trim() || "If you were happy with the clean, please scan below and leave us a quick review.";
-      el("artBottomCopy").textContent = el("bottomText").value.trim() || "Your feedback really helps our business and helps other local customers choose us with confidence.";
+      const meta = getTargetMeta();
+      const tc = getTextColors();
+
+      const company = el("companyName").value.trim() || "Your Company Name";
+      const tagline = el("tagline").value.trim() || "Professional carpet cleaning";
+
+      const customHeadline = el("headlineText").value.trim();
+      const customSub = el("sublineText").value.trim();
+      const customBottom = el("bottomText").value.trim();
+
+      el("artCompanyName").textContent = company;
+      el("artTagline").textContent = tagline;
+      el("artHeadline").textContent = customHeadline || meta.heading;
+      el("artSubline").textContent = customSub || meta.sub;
+      el("artBottomCopy").textContent = customBottom || meta.bottom;
+      el("artCtaButton").textContent = meta.cta;
       el("artContact").textContent = el("phone").value.trim() || "07802563213";
+      el("artStars").textContent = qrTarget === "review" ? "★★★★★  5 STAR GOOGLE REVIEWS" : "★★★★★";
+
+      el("artCompanyName").style.color = tc.main;
+      el("artTagline").style.color = tc.soft;
+      el("artHeadline").style.color = tc.main;
+      el("artSubline").style.color = tc.soft;
+      el("artBottomCopy").style.color = tc.main;
+
+      el("artCompanyName").style.textShadow = "0 2px 14px " + tc.shadow;
+      el("artTagline").style.textShadow = "0 2px 12px " + tc.shadow;
+      el("artHeadline").style.textShadow = "0 4px 22px " + tc.shadow;
+      el("artSubline").style.textShadow = "0 2px 14px " + tc.shadow;
+      el("artBottomCopy").style.textShadow = "0 2px 14px " + tc.shadow;
     }
 
     function updatePreviewBackground() {
@@ -1163,6 +1279,30 @@
       }
       downloadDataUrl(el("qrPreviewCanvas").toDataURL("image/png"), "qr-code.png");
       showMessage("QR code downloaded.", "ok");
+    }
+
+    function openCurrentLink() {
+      const text = getQRText();
+      if (!text) {
+        showMessage("Add a valid link first.", "warn");
+        return;
+      }
+      window.open(text, "_blank");
+    }
+
+    async function copyCurrentLink() {
+      const text = getQRText();
+      if (!text) {
+        showMessage("Add a valid link first.", "warn");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(text);
+        showMessage("Link copied.", "ok");
+      } catch (err) {
+        showMessage("Copy failed.", "warn");
+      }
     }
 
     function roundRect(ctx, x, y, w, h, r, fill, stroke) {
@@ -1251,13 +1391,15 @@
       const w = canvas.width;
       const h = canvas.height;
       const accent = getAccent();
+      const tc = getTextColors();
       const heroSrc = uploadedHero || defaultHero;
+      const meta = getTargetMeta();
 
       const company = el("companyName").value.trim() || "Your Company Name";
       const tagline = el("tagline").value.trim() || "Professional carpet cleaning";
-      const headline = el("headlineText").value.trim() || "Thanks for choosing us";
-      const subline = el("sublineText").value.trim() || "If you were happy with the clean, please scan below and leave us a quick review.";
-      const bottomText = el("bottomText").value.trim() || "Your feedback really helps our business and helps other local customers choose us with confidence.";
+      const headline = el("headlineText").value.trim() || meta.heading;
+      const subline = el("sublineText").value.trim() || meta.sub;
+      const bottomText = el("bottomText").value.trim() || meta.bottom;
       const phone = el("phone").value.trim() || "07802563213";
 
       const heroImg = await loadImage(heroSrc);
@@ -1286,19 +1428,19 @@
 
       ctx.textAlign = "left";
       ctx.textBaseline = "alphabetic";
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = tc.main;
       ctx.font = "800 54px Inter";
       drawWrappedText(ctx, company, side + 138, safeTop + 46, w - side * 2 - 146, 60);
 
-      ctx.fillStyle = "#eef5ff";
+      ctx.fillStyle = tc.soft;
       ctx.font = "500 28px Inter";
       drawWrappedText(ctx, tagline, side + 138, safeTop + 92, w - side * 2 - 146, 34);
 
-      ctx.fillStyle = "#ffffff";
-      ctx.font = mode === "lock" ? "700 86px Playfair Display" : "700 74px Playfair Display";
-      drawWrappedText(ctx, headline, side, safeTop + 200, w - side * 2, mode === "lock" ? 92 : 80);
+      ctx.fillStyle = tc.main;
+      ctx.font = mode === "lock" ? "700 86px Playfair Display" : "700 78px Playfair Display";
+      drawWrappedText(ctx, headline, side, safeTop + 200, w - side * 2, mode === "lock" ? 92 : 84);
 
-      ctx.fillStyle = "#f1f6ff";
+      ctx.fillStyle = tc.soft;
       ctx.font = mode === "lock" ? "500 34px Inter" : "500 30px Inter";
       drawWrappedText(ctx, subline, side, safeTop + 292, w - side * 2, mode === "lock" ? 44 : 38);
 
@@ -1320,7 +1462,7 @@
       ctx.textAlign = "center";
       ctx.fillStyle = accent.dark;
       ctx.font = mode === "lock" ? "800 28px Inter" : "800 34px Inter";
-      ctx.fillText(el("artQrLabel").textContent, w / 2, qrCardY + 66);
+      ctx.fillText(meta.label, w / 2, qrCardY + 66);
 
       const qrSize = mode === "lock" ? 500 : 560;
       const qrX = (w - qrSize) / 2;
@@ -1332,13 +1474,27 @@
       roundRect(ctx, qrX - 20, qrY - 20, qrSize + 40, qrSize + 40, 28, true, true);
       ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
-      ctx.fillStyle = "#f5b300";
-      ctx.font = mode === "lock" ? "800 50px Inter" : "800 54px Inter";
-      ctx.fillText("★★★★★", w / 2, qrY + qrSize + 110);
+      ctx.fillStyle = "#f5c84c";
+      ctx.font = mode === "lock" ? "800 44px Inter" : "800 50px Inter";
+      ctx.fillText(qrTarget === "review" ? "★★★★★  5 STAR GOOGLE REVIEWS" : "★★★★★", w / 2, qrY + qrSize + 110);
 
-      ctx.fillStyle = "#3d587a";
+      ctx.fillStyle = tc.main;
       ctx.font = mode === "lock" ? "500 32px Inter" : "500 34px Inter";
-      drawWrappedTextCentered(ctx, bottomText, w / 2, qrY + qrSize + 170, w * 0.72, mode === "lock" ? 42 : 44);
+      drawWrappedTextCentered(ctx, bottomText, w / 2, qrY + qrSize + 150, w * 0.72, mode === "lock" ? 42 : 44);
+
+      const ctaW = mode === "lock" ? 620 : 660;
+      const ctaH = mode === "lock" ? 78 : 86;
+      const ctaX = (w - ctaW) / 2;
+      const ctaY = h - (mode === "lock" ? 345 : 320);
+
+      ctx.fillStyle = "rgba(255,255,255,.95)";
+      ctx.strokeStyle = "rgba(255,255,255,.80)";
+      ctx.lineWidth = 2;
+      roundRect(ctx, ctaX, ctaY, ctaW, ctaH, ctaH / 2, true, true);
+
+      ctx.fillStyle = "#153055";
+      ctx.font = mode === "lock" ? "800 30px Inter" : "800 32px Inter";
+      ctx.fillText(meta.cta, w / 2, ctaY + ctaH / 2 + 10);
 
       const pillW = mode === "lock" ? 520 : 560;
       const pillH = mode === "lock" ? 86 : 96;
@@ -1383,13 +1539,15 @@
       el("companyName").value = "The Carpet Cleaning Company";
       el("tagline").value = "Professional carpet and upholstery cleaning";
       el("phone").value = "07802563213";
-      el("headlineText").value = "Thanks for choosing us";
-      el("sublineText").value = "If you were happy with the clean, please scan below and leave us a quick review.";
+      el("headlineText").value = "";
+      el("sublineText").value = "";
       el("reviewLink").value = "https://share.google/lSXNdkbJIC5QM8Qu2";
       el("websiteLink").value = "https://www.thecarpetcleaningcrew.co.uk";
       el("facebookLink").value = "https://www.facebook.com";
       el("customLink").value = "Thank you for choosing us";
-      el("bottomText").value = "Your feedback really helps our business and helps other local customers choose us with confidence.";
+      el("bottomText").value = "";
+      el("accentColor").value = "blue";
+      el("textColor").value = "white";
       uploadedLogo = null;
       uploadedHero = null;
       qrReady = false;
@@ -1431,6 +1589,7 @@
       "facebookLink",
       "customLink",
       "accentColor",
+      "textColor",
       "bottomText"
     ].forEach(id => {
       el(id).addEventListener("input", updateAllPreviewOnly);
@@ -1445,6 +1604,8 @@
     el("downloadLockBtn").addEventListener("click", downloadLockscreen);
     el("previewLockBtn").addEventListener("click", downloadLockscreen);
     el("exampleBtn").addEventListener("click", loadExample);
+    el("openLinkBtn").addEventListener("click", openCurrentLink);
+    el("copyLinkBtn").addEventListener("click", copyCurrentLink);
 
     window.addEventListener("load", loadExample);
   </script>
