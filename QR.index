@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: white;
+      margin: 0;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #1f2937;
+      padding: 25px;
+      border-radius: 16px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    input {
+      background: white;
+      color: black;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+
+    #qrcode {
+      margin-top: 25px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>QR Code Generator</h1>
+    <input type="text" id="qrText" placeholder="Paste link here" value="https://share.google/lSXNdkbJIC5QM8Qu2">
+    <button onclick="generateQR()">Generate QR Code</button>
+    <div id="qrcode"></div>
+  </div>
+
+  <script>
+    let qr;
+
+    function generateQR() {
+      const text = document.getElementById("qrText").value.trim();
+      const qrBox = document.getElementById("qrcode");
+      qrBox.innerHTML = "";
+
+      if (!text) {
+        alert("Please enter a link");
+        return;
+      }
+
+      qr = new QRCode(qrBox, {
+        text: text,
+        width: 250,
+        height: 250,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    window.onload = generateQR;
+  </script>
+</body>
+</html>
