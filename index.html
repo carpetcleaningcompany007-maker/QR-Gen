@@ -1,468 +1,1083 @@
-<script>
-  const el = id => document.getElementById(id);
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carpet Cleaner QR Studio</title>
+  <meta name="description" content="QR generator for carpet cleaning businesses">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#121b2c;
+      --panel2:#182234;
+      --line:rgba(255,255,255,.10);
+      --text:#eef4ff;
+      --muted:#a8bad8;
+      --brand:#2f7cf6;
+      --brand2:#1f5dd7;
+      --gold:#f3c34d;
+      --shadow:0 18px 40px rgba(0,0,0,.28);
+      --radius:22px;
+      --max:1300px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(47,124,246,.14), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(243,195,77,.10), transparent 28%),
+        linear-gradient(180deg,#0a1220 0%, #111a2d 100%);
+    }
+    .container{width:min(var(--max),calc(100% - 28px));margin:0 auto}
+    .hero{
+      margin:18px auto 22px;
+      border:1px solid var(--line);
+      border-radius:30px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      background:
+        linear-gradient(180deg, rgba(8,16,29,.20), rgba(8,16,29,.45)),
+        url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1600&q=80") center/cover;
+      min-height:340px;
+      display:flex;
+      align-items:center;
+      padding:34px;
+    }
+    .hero-copy{
+      max-width:760px;
+    }
+    .eyebrow{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:14px;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(36px,5vw,68px);
+      line-height:1.02;
+      letter-spacing:-.05em;
+    }
+    .hero p{
+      margin:14px 0 0;
+      color:#eef4ff;
+      max-width:700px;
+      line-height:1.7;
+      font-size:18px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1.02fr .98fr;
+      gap:22px;
+      padding-bottom:28px;
+    }
+    .panel{
+      border:1px solid var(--line);
+      border-radius:26px;
+      background:linear-gradient(180deg,var(--panel),var(--panel2));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .panel-head{padding:24px 24px 0}
+    .panel-head h2{margin:0;font-size:24px}
+    .panel-head p{margin:10px 0 0;color:var(--muted);line-height:1.6}
+    .panel-body{padding:24px}
+    .field{margin-bottom:18px}
+    label{
+      display:block;
+      margin-bottom:10px;
+      font-size:14px;
+      font-weight:700;
+    }
+    input, textarea, select{
+      width:100%;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      border-radius:16px;
+      padding:14px 15px;
+      font:500 15px Inter,system-ui,Arial,sans-serif;
+      outline:none;
+    }
+    textarea{min-height:100px;resize:vertical}
+    input::placeholder, textarea::placeholder{color:#a7b9d7}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .choice-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .choice{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#eef4ff;
+      border-radius:16px;
+      padding:14px 10px;
+      text-align:center;
+      font-size:13px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .choice.active{
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      border-color:transparent;
+    }
+    .btn-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .btn-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    button{
+      border:none;
+      border-radius:16px;
+      padding:14px 18px;
+      min-height:50px;
+      font:700 15px/1 Inter,system-ui,Arial,sans-serif;
+      cursor:pointer;
+    }
+    .btn-primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+    }
+    .btn-secondary{
+      color:#eef4ff;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .btn-gold{
+      color:#5b4100;
+      background:linear-gradient(135deg,#ffe08a,var(--gold));
+    }
+    .upload-box{
+      border:1px dashed rgba(255,255,255,.16);
+      background:rgba(255,255,255,.04);
+      border-radius:20px;
+      padding:16px;
+    }
+    .upload-preview{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-top:12px;
+    }
+    .thumb{
+      width:78px;
+      height:78px;
+      border-radius:18px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.12);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      color:#a8bad8;
+      flex:0 0 auto;
+    }
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      background:#fff;
+    }
+    .note{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .preview-wrap{
+      border:1px solid var(--line);
+      border-radius:26px;
+      background:linear-gradient(180deg,var(--panel),var(--panel2));
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .preview-card{
+      position:relative;
+      width:min(100%, 500px);
+      min-height:820px;
+      margin:0 auto;
+      border-radius:34px;
+      overflow:hidden;
+      background:#1d2b43;
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .preview-bg{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(8,16,29,.20), rgba(8,16,29,.45)),
+        url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1600&q=80") center/cover;
+    }
+    .preview-content{
+      position:relative;
+      z-index:2;
+      padding:26px 22px 24px;
+    }
+    .brand-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:16px;
+    }
+    .brand-logo{
+      width:78px;
+      height:78px;
+      border-radius:20px;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.72);
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+    }
+    .brand-logo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      background:#fff;
+    }
+    .wand-icon{
+      width:44px;height:44px;position:relative;
+    }
+    .wand-icon::before{
+      content:"";
+      position:absolute;
+      left:18px;top:-2px;
+      width:8px;height:34px;border-radius:6px;
+      background:#23446f;
+      transform:rotate(18deg);
+    }
+    .wand-icon::after{
+      content:"";
+      position:absolute;
+      left:7px;bottom:3px;
+      width:30px;height:10px;border-radius:8px;
+      background:#6ea4ef;
+      transform:rotate(-14deg);
+    }
+    .brand-text strong{
+      display:block;
+      font-size:25px;
+      line-height:1.08;
+      letter-spacing:-.03em;
+      text-shadow:0 2px 14px rgba(0,0,0,.22);
+    }
+    .brand-text small{
+      display:block;
+      margin-top:5px;
+      color:#eef4ff;
+      line-height:1.45;
+      text-shadow:0 2px 12px rgba(0,0,0,.22);
+    }
+    .title{
+      font-family:"Playfair Display",serif;
+      font-size:44px;
+      line-height:1.02;
+      letter-spacing:-.03em;
+      margin:8px 0;
+      max-width:380px;
+      text-shadow:0 2px 18px rgba(0,0,0,.22);
+    }
+    .sub{
+      color:#eef4ff;
+      line-height:1.65;
+      max-width:380px;
+      text-shadow:0 2px 14px rgba(0,0,0,.18);
+    }
+    .qr-card{
+      width:340px;
+      margin:22px auto 0;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(255,255,255,.72);
+      border-radius:30px;
+      padding:18px;
+      box-shadow:0 24px 40px rgba(18,37,63,.20);
+    }
+    .qr-head{
+      text-align:center;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.04em;
+      color:#1f5dd7;
+      margin-bottom:10px;
+    }
+    .qr-box{
+      background:#fff;
+      border:1px solid #e4edf8;
+      border-radius:20px;
+      padding:12px;
+      display:grid;
+      place-items:center;
+      min-height:316px;
+    }
+    #qrPreviewCanvas{
+      width:100%;
+      height:auto;
+      display:block;
+      background:#fff;
+      border-radius:12px;
+    }
+    .stars{
+      text-align:center;
+      color:#f5b300;
+      font-size:30px;
+      letter-spacing:3px;
+      margin-top:18px;
+      text-shadow:0 2px 12px rgba(0,0,0,.18);
+    }
+    .bottom-copy{
+      text-align:center;
+      color:#fff;
+      font-size:15px;
+      line-height:1.62;
+      max-width:360px;
+      margin:12px auto 0;
+      text-shadow:0 2px 14px rgba(0,0,0,.22);
+    }
+    .contact-pill{
+      margin:18px auto 0;
+      max-width:340px;
+      text-align:center;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.72);
+      border-radius:999px;
+      padding:12px 16px;
+      color:#153055;
+      font-size:15px;
+      font-weight:800;
+    }
+    .preview-actions{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+    .msg{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:800;
+      display:none;
+    }
+    .msg.show{display:block}
+    .msg.ok{
+      background:#e9fbf2;
+      color:#16784a;
+      border:1px solid #b7eccf;
+    }
+    .msg.warn{
+      background:#fff8e6;
+      color:#8f6600;
+      border:1px solid #f7e3a4;
+    }
 
-  let qrTarget = "review";
-  let uploadedLogo = null;
-  let uploadedHero = null;
-  let qrReady = false;
-  let qrInstance = null;
+    @media (max-width:1060px){
+      .hero-grid,.main-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:760px){
+      .hero-card{padding:24px}
+      .topbar-inner{flex-direction:column;align-items:flex-start}
+      .two,.three,.choice-grid,.btn-row,.btn-row-2,.stats,.preview-actions{grid-template-columns:1fr}
+      .panel-head,.panel-body{padding-left:18px;padding-right:18px}
+      .title{font-size:36px}
+      .qr-card{width:292px}
+    }
+  </style>
+</head>
+<body>
 
-  const defaultHero = "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1600&q=80";
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="brand-badge">QR</div>
+          <div class="brand-copy">
+            <strong>Carpet Cleaner QR Studio</strong>
+            <span>Working QR generator with logo upload and branded exports</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  function getAccent() {
-    const map = {
-      blue:   { main:"#2f7cf6", dark:"#1f5dd7" },
-      gold:   { main:"#f0b62f", dark:"#c48d09" },
-      emerald:{ main:"#18b36b", dark:"#0c8a50" },
-      violet: { main:"#8b63f7", dark:"#6d42da" }
-    };
-    return map[el("accentColor").value] || map.blue;
-  }
+  <section class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">Working version</div>
+            <h1>Create proper carpet cleaning QR cards and wallpapers</h1>
+            <p>Upload a logo, upload a carpet cleaning image, choose what the QR is for, generate it, then download the finished designs.</p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" onclick="document.getElementById('studio').scrollIntoView({behavior:'smooth'})">Go to studio</button>
+            </div>
+          </div>
+          <div class="hero-art">
+            <div class="hero-mini">
+              <div class="hero-mini-label">SCAN TO LEAVE A REVIEW</div>
+              <div class="hero-mini-qr"></div>
+              <div class="hero-mini-stars">★★★★★</div>
+              <div class="hero-mini-copy">Thank you for choosing us. Your feedback helps our business.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  function setTarget(target) {
-    qrTarget = target;
+  <main class="main" id="studio">
+    <div class="container">
+      <div class="main-grid">
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Studio setup</h2>
+            <p>This version uses a simpler QR library and a cleaner logo upload flow.</p>
+          </div>
+          <div class="panel-body">
+
+            <div class="two">
+              <div class="field">
+                <label for="companyName">Company name</label>
+                <input id="companyName" type="text" placeholder="The Carpet Cleaning Company">
+              </div>
+              <div class="field">
+                <label for="tagline">Tagline</label>
+                <input id="tagline" type="text" placeholder="Professional carpet and upholstery cleaning">
+              </div>
+            </div>
+
+            <div class="two">
+              <div class="field">
+                <label for="phone">Phone number</label>
+                <input id="phone" type="text" placeholder="07802563213">
+              </div>
+              <div class="field">
+                <label for="headlineText">Main heading</label>
+                <input id="headlineText" type="text" placeholder="Thanks for choosing us">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="sublineText">Smaller message</label>
+              <textarea id="sublineText" placeholder="If you were happy with the clean, please scan below and leave us a quick review."></textarea>
+            </div>
+
+            <div class="field">
+              <label>What is this QR for</label>
+              <div class="choice-grid">
+                <div class="choice active" data-target="review">Google review</div>
+                <div class="choice" data-target="website">Website</div>
+                <div class="choice" data-target="facebook">Facebook</div>
+                <div class="choice" data-target="custom">Custom</div>
+              </div>
+            </div>
+
+            <div class="field" id="reviewFieldWrap">
+              <label for="reviewLink">Google review link</label>
+              <input id="reviewLink" type="text" placeholder="https://share.google/...">
+            </div>
+
+            <div class="field" id="websiteFieldWrap" style="display:none;">
+              <label for="websiteLink">Website link</label>
+              <input id="websiteLink" type="text" placeholder="https://www.yourwebsite.co.uk">
+            </div>
+
+            <div class="field" id="facebookFieldWrap" style="display:none;">
+              <label for="facebookLink">Facebook link</label>
+              <input id="facebookLink" type="text" placeholder="https://www.facebook.com/yourpage">
+            </div>
+
+            <div class="field" id="customFieldWrap" style="display:none;">
+              <label for="customLink">Custom text or link</label>
+              <textarea id="customLink" placeholder="Type any text or paste any link"></textarea>
+            </div>
+
+            <div class="upload-box field">
+              <label for="logoUpload">Upload logo</label>
+              <input id="logoUpload" type="file" accept="image/*">
+              <div class="upload-preview">
+                <div class="thumb" id="logoThumb">No logo</div>
+                <div class="note">Your uploaded logo should appear here straight away.</div>
+              </div>
+            </div>
+
+            <div class="upload-box field">
+              <label for="heroUpload">Upload carpet cleaning background image</label>
+              <input id="heroUpload" type="file" accept="image/*">
+              <div class="upload-preview">
+                <div class="thumb" id="heroThumb">No image</div>
+                <div class="note">This image will be used behind the live preview and exports.</div>
+              </div>
+            </div>
+
+            <div class="three">
+              <div class="field">
+                <label for="accentColor">Accent colour</label>
+                <select id="accentColor">
+                  <option value="blue" selected>Blue</option>
+                  <option value="gold">Gold</option>
+                  <option value="emerald">Emerald</option>
+                  <option value="violet">Violet</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="badgeMode">Badge style</label>
+                <select id="badgeMode">
+                  <option value="logo" selected>Uploaded logo</option>
+                  <option value="wand">Carpet wand icon</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="bottomText">Bottom support text</label>
+                <input id="bottomText" type="text" placeholder="Your feedback really helps our business">
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-primary" id="generateBtn">Generate QR</button>
+              <button class="btn btn-secondary" id="downloadQrBtn">Download QR only</button>
+              <button class="btn btn-secondary" id="downloadCardBtn">Download review card</button>
+            </div>
+
+            <div class="btn-row-2">
+              <button class="btn btn-gold" id="downloadLockBtn">Download lock screen</button>
+              <button class="btn btn-secondary" id="exampleBtn">Load example</button>
+            </div>
+
+            <div class="msg warn show" id="helpMsg">Press Generate QR after entering your chosen link.</div>
+          </div>
+        </section>
+
+        <section>
+          <div class="stats">
+            <div class="stat">
+              <strong>Working</strong>
+              <span>Generate QR fixed</span>
+            </div>
+            <div class="stat">
+              <strong>Working</strong>
+              <span>Logo upload fixed</span>
+            </div>
+            <div class="stat">
+              <strong>Premium</strong>
+              <span>Luxury dark design</span>
+            </div>
+          </div>
+
+          <div class="preview-wrap">
+            <div class="review-art">
+              <div class="review-bg" id="reviewBg"></div>
+              <div class="review-overlay"></div>
+
+              <div class="preview-content">
+                <div class="brand-row">
+                  <div class="brand-logo" id="reviewBadge">
+                    <div class="wand-icon"></div>
+                  </div>
+                  <div class="brand-text">
+                    <strong id="artCompanyName">Your Company Name</strong>
+                    <small id="artTagline">Professional carpet cleaning</small>
+                  </div>
+                </div>
+
+                <div class="title" id="artHeadline">Thanks for choosing us</div>
+                <div class="sub" id="artSubline">If you were happy with the clean, please scan below and leave us a quick review.</div>
+
+                <div class="qr-card">
+                  <div class="qr-head" id="artQrLabel">SCAN TO LEAVE A REVIEW</div>
+                  <div class="qr-box">
+                    <canvas id="qrPreviewCanvas" width="500" height="500"></canvas>
+                  </div>
+                </div>
+
+                <div class="stars">★★★★★</div>
+                <div class="bottom-copy" id="artBottomCopy">Your feedback really helps our business and helps other local customers choose us with confidence.</div>
+                <div class="contact-pill" id="artContact">07802563213</div>
+              </div>
+            </div>
+
+            <div class="preview-actions">
+              <button class="btn btn-primary" id="previewGenerateBtn">Generate QR</button>
+              <button class="btn btn-secondary" id="previewCardBtn">Download card</button>
+              <button class="btn btn-gold" id="previewLockBtn">Download lock screen</button>
+            </div>
+
+            <div class="msg ok" id="actionMsg"></div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-card">
+        <div class="small">Carpet Cleaner QR Studio</div>
+        <div class="small">Working QR builder with logo upload, review cards and lock screen exports</div>
+      </div>
+    </div>
+  </footer>
+
+  <canvas id="exportCanvas" width="1600" height="2200" style="display:none"></canvas>
+  <canvas id="lockscreenCanvas" width="1290" height="2796" style="display:none"></canvas>
+
+  <script>
+    const el = id => document.getElementById(id);
+
+    let qrTarget = "review";
+    let uploadedLogo = null;
+    let uploadedHero = null;
+    let qrReady = false;
+    let qrValue = "";
+
+    const defaultHero = "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1600&q=80";
+
+    function getAccent() {
+      const map = {
+        blue:   { main:"#2f7cf6", dark:"#1f5dd7" },
+        gold:   { main:"#f0b62f", dark:"#c48d09" },
+        emerald:{ main:"#18b36b", dark:"#0c8a50" },
+        violet: { main:"#8b63f7", dark:"#6d42da" }
+      };
+      return map[el("accentColor").value] || map.blue;
+    }
+
+    function setTarget(target) {
+      qrTarget = target;
+      document.querySelectorAll(".choice").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.target === target);
+      });
+
+      el("reviewFieldWrap").style.display = target === "review" ? "" : "none";
+      el("websiteFieldWrap").style.display = target === "website" ? "" : "none";
+      el("facebookFieldWrap").style.display = target === "facebook" ? "" : "none";
+      el("customFieldWrap").style.display = target === "custom" ? "" : "none";
+      updateQrLabel();
+    }
+
+    function updateQrLabel() {
+      const labels = {
+        review: "SCAN TO LEAVE A REVIEW",
+        website: "SCAN TO VISIT OUR WEBSITE",
+        facebook: "SCAN TO VIEW OUR FACEBOOK",
+        custom: "SCAN THE QR CODE"
+      };
+      el("artQrLabel").textContent = labels[qrTarget] || "SCAN THE QR CODE";
+    }
+
+    function getQRText() {
+      if (qrTarget === "review") return el("reviewLink").value.trim();
+      if (qrTarget === "website") return el("websiteLink").value.trim();
+      if (qrTarget === "facebook") return el("facebookLink").value.trim();
+      if (qrTarget === "custom") return el("customLink").value.trim();
+      return "";
+    }
+
+    function readFileAsDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    function renderBadgeHTML(container) {
+      container.innerHTML = "";
+
+      if (el("badgeMode").value === "logo" && uploadedLogo) {
+        const img = document.createElement("img");
+        img.src = uploadedLogo;
+        img.alt = "Logo";
+        container.appendChild(img);
+        return;
+      }
+
+      const wand = document.createElement("div");
+      wand.className = "wand-icon";
+      container.appendChild(wand);
+    }
+
+    function updateThumbs() {
+      el("logoThumb").innerHTML = uploadedLogo
+        ? '<img src="' + uploadedLogo + '" alt="Logo">'
+        : "No logo";
+
+      el("heroThumb").innerHTML = uploadedHero
+        ? '<img src="' + uploadedHero + '" alt="Background image">'
+        : "No image";
+    }
+
+    function updatePreviewText() {
+      el("artCompanyName").textContent = el("companyName").value.trim() || "Your Company Name";
+      el("artTagline").textContent = el("tagline").value.trim() || "Professional carpet cleaning";
+      el("artHeadline").textContent = el("headlineText").value.trim() || "Thanks for choosing us";
+      el("artSubline").textContent = el("sublineText").value.trim() || "If you were happy with the clean, please scan below and leave us a quick review.";
+      el("artBottomCopy").textContent = el("bottomText").value.trim() || "Your feedback really helps our business and helps other local customers choose us with confidence.";
+      el("artContact").textContent = el("phone").value.trim() || "07802563213";
+    }
+
+    function updatePreviewBackground() {
+      const src = uploadedHero || defaultHero;
+      el("reviewBg").style.backgroundImage = 'url("' + src + '")';
+    }
+
+    function updateAllPreviewOnly() {
+      updateQrLabel();
+      updateThumbs();
+      updatePreviewText();
+      updatePreviewBackground();
+      renderBadgeHTML(el("reviewBadge"));
+    }
+
+    function showMessage(msg, type) {
+      const box = el("actionMsg");
+      box.textContent = msg;
+      box.className = "msg show " + (type === "warn" ? "warn" : "ok");
+      clearTimeout(window._msgTimer);
+      window._msgTimer = setTimeout(() => {
+        box.className = "msg " + (type === "warn" ? "warn" : "ok");
+      }, 2200);
+    }
+
+    function generateQR() {
+      const text = getQRText();
+      if (!text) {
+        qrReady = false;
+        showMessage("Add a valid link or text first.", "warn");
+        return false;
+      }
+
+      qrValue = text;
+
+      new QRious({
+        element: el("qrPreviewCanvas"),
+        value: text,
+        size: 500,
+        level: "H",
+        foreground: "#000000",
+        background: "#ffffff",
+        padding: 20
+      });
+
+      qrReady = true;
+      showMessage("QR generated.", "ok");
+      return true;
+    }
+
+    function downloadDataUrl(url, filename) {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+    }
+
+    function downloadQR() {
+      if (!qrReady) {
+        const ok = generateQR();
+        if (!ok) return;
+      }
+      downloadDataUrl(el("qrPreviewCanvas").toDataURL("image/png"), "qr-code.png");
+      showMessage("QR code downloaded.", "ok");
+    }
+
+    function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+    }
+
+    function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = (text || "").split(" ");
+      let line = "";
+      let yy = y;
+
+      for (let i = 0; i < words.length; i++) {
+        const test = line + words[i] + " ";
+        if (ctx.measureText(test).width > maxWidth && i > 0) {
+          ctx.fillText(line.trim(), x, yy);
+          line = words[i] + " ";
+          yy += lineHeight;
+        } else {
+          line = test;
+        }
+      }
+      if (line.trim()) ctx.fillText(line.trim(), x, yy);
+    }
+
+    function drawWrappedTextCentered(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = (text || "").split(" ");
+      let line = "";
+      let yy = y;
+
+      for (let i = 0; i < words.length; i++) {
+        const test = line + words[i] + " ";
+        if (ctx.measureText(test).width > maxWidth && i > 0) {
+          ctx.fillText(line.trim(), x, yy);
+          line = words[i] + " ";
+          yy += lineHeight;
+        } else {
+          line = test;
+        }
+      }
+      if (line.trim()) ctx.fillText(line.trim(), x, yy);
+    }
+
+    async function drawBadgeOnCanvas(ctx, x, y, size) {
+      ctx.fillStyle = "rgba(255,255,255,.92)";
+      ctx.strokeStyle = "rgba(255,255,255,.72)";
+      ctx.lineWidth = 2;
+      roundRect(ctx, x, y, size, size, 22, true, true);
+
+      if (el("badgeMode").value === "logo" && uploadedLogo) {
+        const img = await loadImage(uploadedLogo);
+        ctx.drawImage(img, x + 10, y + 10, size - 20, size - 20);
+        return;
+      }
+
+      ctx.strokeStyle = "#23446f";
+      ctx.lineWidth = 10;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(x + 44, y + 16);
+      ctx.lineTo(x + 56, y + 54);
+      ctx.stroke();
+
+      ctx.fillStyle = "#6ea4ef";
+      roundRect(ctx, x + 22, y + 52, 42, 14, 8, true, false);
+    }
+
+    async function renderDesign(canvas, mode) {
+      if (!qrReady) {
+        const ok = generateQR();
+        if (!ok) return false;
+      }
+
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const accent = getAccent();
+      const heroSrc = uploadedHero || defaultHero;
+
+      const company = el("companyName").value.trim() || "Your Company Name";
+      const tagline = el("tagline").value.trim() || "Professional carpet cleaning";
+      const headline = el("headlineText").value.trim() || "Thanks for choosing us";
+      const subline = el("sublineText").value.trim() || "If you were happy with the clean, please scan below and leave us a quick review.";
+      const bottomText = el("bottomText").value.trim() || "Your feedback really helps our business and helps other local customers choose us with confidence.";
+      const phone = el("phone").value.trim() || "07802563213";
+
+      const heroImg = await loadImage(heroSrc);
+      const qrImg = await loadImage(el("qrPreviewCanvas").toDataURL("image/png"));
+
+      ctx.clearRect(0, 0, w, h);
+
+      const scale = Math.max(w / heroImg.width, h / heroImg.height);
+      const drawW = heroImg.width * scale;
+      const drawH = heroImg.height * scale;
+      const drawX = (w - drawW) / 2;
+      const drawY = (h - drawH) / 2;
+      ctx.drawImage(heroImg, drawX, drawY, drawW, drawH);
+
+      const overlay = ctx.createLinearGradient(0, 0, 0, h);
+      overlay.addColorStop(0, "rgba(8,16,29,0.24)");
+      overlay.addColorStop(.55, "rgba(8,16,29,0.38)");
+      overlay.addColorStop(1, "rgba(8,16,29,0.55)");
+      ctx.fillStyle = overlay;
+      ctx.fillRect(0, 0, w, h);
+
+      const safeTop = mode === "lock" ? 180 : 90;
+      const side = mode === "lock" ? 88 : 78;
+
+      await drawBadgeOnCanvas(ctx, side, safeTop, 112);
+
+      ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 54px Inter";
+      drawWrappedText(ctx, company, side + 138, safeTop + 46, w - side * 2 - 146, 60);
+
+      ctx.fillStyle = "#eef5ff";
+      ctx.font = "500 28px Inter";
+      drawWrappedText(ctx, tagline, side + 138, safeTop + 92, w - side * 2 - 146, 34);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = mode === "lock" ? "700 86px Playfair Display" : "700 74px Playfair Display";
+      drawWrappedText(ctx, headline, side, safeTop + 200, w - side * 2, mode === "lock" ? 92 : 80);
+
+      ctx.fillStyle = "#f1f6ff";
+      ctx.font = mode === "lock" ? "500 34px Inter" : "500 30px Inter";
+      drawWrappedText(ctx, subline, side, safeTop + 292, w - side * 2, mode === "lock" ? 44 : 38);
+
+      const qrCardW = mode === "lock" ? 690 : 760;
+      const qrCardH = mode === "lock" ? 760 : 840;
+      const qrCardX = (w - qrCardW) / 2;
+      const qrCardY = mode === "lock" ? h * 0.42 : h * 0.40;
+
+      ctx.shadowColor = "rgba(0,0,0,.28)";
+      ctx.shadowBlur = 34;
+      ctx.fillStyle = "rgba(255,255,255,.96)";
+      roundRect(ctx, qrCardX, qrCardY, qrCardW, qrCardH, 42, true, false);
+      ctx.shadowBlur = 0;
+
+      ctx.strokeStyle = "rgba(255,255,255,.72)";
+      ctx.lineWidth = 2;
+      roundRect(ctx, qrCardX, qrCardY, qrCardW, qrCardH, 42, false, true);
+
+      ctx.textAlign = "center";
+      ctx.fillStyle = accent.dark;
+      ctx.font = mode === "lock" ? "800 28px Inter" : "800 34px Inter";
+      ctx.fillText(el("artQrLabel").textContent, w / 2, qrCardY + 66);
+
+      const qrSize = mode === "lock" ? 500 : 560;
+      const qrX = (w - qrSize) / 2;
+      const qrY = qrCardY + 105;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#e5eef9";
+      ctx.lineWidth = 2;
+      roundRect(ctx, qrX - 20, qrY - 20, qrSize + 40, qrSize + 40, 28, true, true);
+      ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+      ctx.fillStyle = "#f5b300";
+      ctx.font = mode === "lock" ? "800 50px Inter" : "800 54px Inter";
+      ctx.fillText("★★★★★", w / 2, qrY + qrSize + 110);
+
+      ctx.fillStyle = "#3d587a";
+      ctx.font = mode === "lock" ? "500 32px Inter" : "500 34px Inter";
+      drawWrappedTextCentered(ctx, bottomText, w / 2, qrY + qrSize + 170, w * 0.72, mode === "lock" ? 42 : 44);
+
+      const pillW = mode === "lock" ? 520 : 560;
+      const pillH = mode === "lock" ? 86 : 96;
+      const pillX = (w - pillW) / 2;
+      const pillY = h - (mode === "lock" ? 240 : 210);
+
+      ctx.fillStyle = "rgba(255,255,255,.92)";
+      ctx.strokeStyle = "rgba(255,255,255,.72)";
+      ctx.lineWidth = 2;
+      roundRect(ctx, pillX, pillY, pillW, pillH, pillH / 2, true, true);
+
+      ctx.fillStyle = "#153055";
+      ctx.font = mode === "lock" ? "800 40px Inter" : "800 44px Inter";
+      ctx.fillText(phone, w / 2, pillY + pillH / 2 + 14);
+
+      return true;
+    }
+
+    async function downloadReviewCard() {
+      const canvas = el("exportCanvas");
+      const ok = await renderDesign(canvas, "card");
+      if (!ok) return;
+      downloadDataUrl(canvas.toDataURL("image/png"), "review-card.png");
+      showMessage("Review card downloaded.", "ok");
+    }
+
+    async function downloadLockscreen() {
+      const canvas = el("lockscreenCanvas");
+      const ok = await renderDesign(canvas, "lock");
+      if (!ok) return;
+      downloadDataUrl(canvas.toDataURL("image/png"), "lock-screen.png");
+      showMessage("Lock screen downloaded.", "ok");
+    }
+
+    function loadExample() {
+      el("companyName").value = "The Carpet Cleaning Company";
+      el("tagline").value = "Professional carpet and upholstery cleaning";
+      el("phone").value = "07802563213";
+      el("headlineText").value = "Thanks for choosing us";
+      el("sublineText").value = "If you were happy with the clean, please scan below and leave us a quick review.";
+      el("reviewLink").value = "https://share.google/lSXNdkbJIC5QM8Qu2";
+      el("websiteLink").value = "https://www.thecarpetcleaningcrew.co.uk";
+      el("facebookLink").value = "https://www.facebook.com";
+      el("customLink").value = "Thank you for choosing us";
+      el("bottomText").value = "Your feedback really helps our business and helps other local customers choose us with confidence.";
+      el("accentColor").value = "blue";
+      el("badgeMode").value = "wand";
+      uploadedLogo = null;
+      uploadedHero = null;
+      qrReady = false;
+      setTarget("review");
+      updateAllPreviewOnly();
+      showMessage("Example loaded.", "ok");
+    }
+
+    el("logoUpload").addEventListener("change", async function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      uploadedLogo = await readFileAsDataURL(file);
+      updateAllPreviewOnly();
+      showMessage("Logo uploaded.", "ok");
+    });
+
+    el("heroUpload").addEventListener("change", async function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      uploadedHero = await readFileAsDataURL(file);
+      updateAllPreviewOnly();
+      showMessage("Background image uploaded.", "ok");
+    });
 
     document.querySelectorAll(".choice").forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.target === target);
+      btn.addEventListener("click", function() {
+        setTarget(btn.dataset.target);
+      });
     });
 
-    el("reviewFieldWrap").style.display = target === "review" ? "" : "none";
-    el("websiteFieldWrap").style.display = target === "website" ? "" : "none";
-    el("facebookFieldWrap").style.display = target === "facebook" ? "" : "none";
-    el("customFieldWrap").style.display = target === "custom" ? "" : "none";
-
-    updateQrLabel();
-  }
-
-  function updateQrLabel() {
-    const labels = {
-      review: "SCAN TO LEAVE A REVIEW",
-      website: "SCAN TO VISIT OUR WEBSITE",
-      facebook: "SCAN TO VIEW OUR FACEBOOK",
-      custom: "SCAN THE QR CODE"
-    };
-    el("artQrLabel").textContent = labels[qrTarget] || "SCAN THE QR CODE";
-  }
-
-  function getQRText() {
-    if (qrTarget === "review") return el("reviewLink").value.trim();
-    if (qrTarget === "website") return el("websiteLink").value.trim();
-    if (qrTarget === "facebook") return el("facebookLink").value.trim();
-    if (qrTarget === "custom") return el("customLink").value.trim();
-    return "";
-  }
-
-  function readFileAsDataURL(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
-  function loadImage(src) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = src;
-    });
-  }
-
-  function renderBadgeHTML(container) {
-    container.innerHTML = "";
-
-    if (el("badgeMode").value === "logo" && uploadedLogo) {
-      const img = document.createElement("img");
-      img.src = uploadedLogo;
-      img.alt = "Logo";
-      container.appendChild(img);
-      return;
-    }
-
-    const wand = document.createElement("div");
-    wand.className = "wand-icon";
-    container.appendChild(wand);
-  }
-
-  function updateThumbs() {
-    if (uploadedLogo) {
-      el("logoThumb").innerHTML = `<img src="${uploadedLogo}" alt="Logo">`;
-    } else {
-      el("logoThumb").textContent = "No logo";
-    }
-
-    if (uploadedHero) {
-      el("heroThumb").innerHTML = `<img src="${uploadedHero}" alt="Background image">`;
-    } else {
-      el("heroThumb").textContent = "No image";
-    }
-  }
-
-  function updatePreviewText() {
-    el("artCompanyName").textContent = el("companyName").value.trim() || "Your Company Name";
-    el("artTagline").textContent = el("tagline").value.trim() || "Professional carpet cleaning";
-    el("artHeadline").textContent = el("headlineText").value.trim() || "Thanks for choosing us";
-    el("artSubline").textContent = el("sublineText").value.trim() || "If you were happy with the clean, please scan below and leave us a quick review.";
-    el("artBottomCopy").textContent = el("bottomText").value.trim() || "Your feedback really helps our business and helps other local customers choose us with confidence.";
-    el("artContact").textContent = el("phone").value.trim() || "07802563213";
-  }
-
-  function updatePreviewBackground() {
-    const src = uploadedHero || defaultHero;
-    el("reviewBg").style.backgroundImage = `url("${src}")`;
-  }
-
-  function updateAllPreviewOnly() {
-    updateQrLabel();
-    updateThumbs();
-    updatePreviewText();
-    updatePreviewBackground();
-    renderBadgeHTML(el("reviewBadge"));
-  }
-
-  function showMessage(msg, type) {
-    const box = el("actionMsg");
-    box.textContent = msg;
-    box.className = "status show " + (type === "warn" ? "warn" : "ok");
-    clearTimeout(window._msgTimer);
-    window._msgTimer = setTimeout(() => {
-      box.className = "status " + (type === "warn" ? "warn" : "ok");
-    }, 2200);
-  }
-
-  function generateQR() {
-    const text = getQRText();
-
-    if (!text) {
-      showMessage("Add a valid link or some text first.", "warn");
-      qrReady = false;
-      return false;
-    }
-
-    const canvas = el("qrPreviewCanvas");
-    const accent = getAccent();
-
-    qrInstance = new QRious({
-      element: canvas,
-      value: text,
-      size: 500,
-      level: "H",
-      foreground: "#000000",
-      background: "#ffffff",
-      padding: 20
+    [
+      "companyName",
+      "tagline",
+      "phone",
+      "headlineText",
+      "sublineText",
+      "reviewLink",
+      "websiteLink",
+      "facebookLink",
+      "customLink",
+      "accentColor",
+      "badgeMode",
+      "bottomText"
+    ].forEach(id => {
+      el(id).addEventListener("input", updateAllPreviewOnly);
+      el(id).addEventListener("change", updateAllPreviewOnly);
     });
 
-    el("artQrLabel").style.color = accent.dark;
-    qrReady = true;
-    showMessage("QR generated.", "ok");
-    return true;
-  }
+    el("generateBtn").addEventListener("click", generateQR);
+    el("previewGenerateBtn").addEventListener("click", generateQR);
+    el("downloadQrBtn").addEventListener("click", downloadQR);
+    el("downloadCardBtn").addEventListener("click", downloadReviewCard);
+    el("previewCardBtn").addEventListener("click", downloadReviewCard);
+    el("downloadLockBtn").addEventListener("click", downloadLockscreen);
+    el("previewLockBtn").addEventListener("click", downloadLockscreen);
+    el("exampleBtn").addEventListener("click", loadExample);
 
-  function downloadDataUrl(url, filename) {
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-  }
-
-  function downloadQR() {
-    if (!qrReady) {
-      const ok = generateQR();
-      if (!ok) return;
-    }
-    downloadDataUrl(el("qrPreviewCanvas").toDataURL("image/png"), "qr-code.png");
-    showMessage("QR code downloaded.", "ok");
-  }
-
-  function roundRect(ctx, x, y, w, h, r, fill, stroke) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-    if (fill) ctx.fill();
-    if (stroke) ctx.stroke();
-  }
-
-  function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
-    const words = (text || "").split(" ");
-    let line = "";
-    let yy = y;
-
-    for (let i = 0; i < words.length; i++) {
-      const test = line + words[i] + " ";
-      if (ctx.measureText(test).width > maxWidth && i > 0) {
-        ctx.fillText(line.trim(), x, yy);
-        line = words[i] + " ";
-        yy += lineHeight;
-      } else {
-        line = test;
-      }
-    }
-    if (line.trim()) ctx.fillText(line.trim(), x, yy);
-  }
-
-  function drawWrappedTextCentered(ctx, text, x, y, maxWidth, lineHeight) {
-    const words = (text || "").split(" ");
-    let line = "";
-    let yy = y;
-
-    for (let i = 0; i < words.length; i++) {
-      const test = line + words[i] + " ";
-      if (ctx.measureText(test).width > maxWidth && i > 0) {
-        ctx.fillText(line.trim(), x, yy);
-        line = words[i] + " ";
-        yy += lineHeight;
-      } else {
-        line = test;
-      }
-    }
-    if (line.trim()) ctx.fillText(line.trim(), x, yy);
-  }
-
-  async function drawBadgeOnCanvas(ctx, x, y, size) {
-    ctx.fillStyle = "rgba(255,255,255,.92)";
-    ctx.strokeStyle = "rgba(255,255,255,.72)";
-    ctx.lineWidth = 2;
-    roundRect(ctx, x, y, size, size, 22, true, true);
-
-    if (el("badgeMode").value === "logo" && uploadedLogo) {
-      const img = await loadImage(uploadedLogo);
-      ctx.drawImage(img, x + 10, y + 10, size - 20, size - 20);
-      return;
-    }
-
-    ctx.strokeStyle = "#23446f";
-    ctx.lineWidth = 10;
-    ctx.lineCap = "round";
-    ctx.beginPath();
-    ctx.moveTo(x + 44, y + 16);
-    ctx.lineTo(x + 56, y + 54);
-    ctx.stroke();
-
-    ctx.fillStyle = "#6ea4ef";
-    roundRect(ctx, x + 22, y + 52, 42, 14, 8, true, false);
-  }
-
-  async function renderDesign(canvas, mode) {
-    if (!qrReady) {
-      const ok = generateQR();
-      if (!ok) return false;
-    }
-
-    const ctx = canvas.getContext("2d");
-    const w = canvas.width;
-    const h = canvas.height;
-    const accent = getAccent();
-    const heroSrc = uploadedHero || defaultHero;
-
-    const company = el("companyName").value.trim() || "Your Company Name";
-    const tagline = el("tagline").value.trim() || "Professional carpet cleaning";
-    const headline = el("headlineText").value.trim() || "Thanks for choosing us";
-    const subline = el("sublineText").value.trim() || "If you were happy with the clean, please scan below and leave us a quick review.";
-    const bottomText = el("bottomText").value.trim() || "Your feedback really helps our business and helps other local customers choose us with confidence.";
-    const phone = el("phone").value.trim() || "07802563213";
-
-    const heroImg = await loadImage(heroSrc);
-    const qrImg = await loadImage(el("qrPreviewCanvas").toDataURL("image/png"));
-
-    ctx.clearRect(0, 0, w, h);
-
-    const scale = Math.max(w / heroImg.width, h / heroImg.height);
-    const drawW = heroImg.width * scale;
-    const drawH = heroImg.height * scale;
-    const drawX = (w - drawW) / 2;
-    const drawY = (h - drawH) / 2;
-
-    ctx.drawImage(heroImg, drawX, drawY, drawW, drawH);
-
-    const overlay = ctx.createLinearGradient(0, 0, 0, h);
-    overlay.addColorStop(0, "rgba(8,16,29,0.24)");
-    overlay.addColorStop(.55, "rgba(8,16,29,0.38)");
-    overlay.addColorStop(1, "rgba(8,16,29,0.55)");
-    ctx.fillStyle = overlay;
-    ctx.fillRect(0, 0, w, h);
-
-    const safeTop = mode === "lock" ? 180 : 90;
-    const side = mode === "lock" ? 88 : 78;
-
-    await drawBadgeOnCanvas(ctx, side, safeTop, 112);
-
-    ctx.textAlign = "left";
-    ctx.textBaseline = "alphabetic";
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "800 54px Inter";
-    drawWrappedText(ctx, company, side + 138, safeTop + 46, w - side * 2 - 146, 60);
-
-    ctx.fillStyle = "#eef5ff";
-    ctx.font = "500 28px Inter";
-    drawWrappedText(ctx, tagline, side + 138, safeTop + 92, w - side * 2 - 146, 34);
-
-    ctx.fillStyle = "#ffffff";
-    ctx.font = mode === "lock" ? "700 86px Playfair Display" : "700 74px Playfair Display";
-    drawWrappedText(ctx, headline, side, safeTop + 200, w - side * 2, mode === "lock" ? 92 : 80);
-
-    ctx.fillStyle = "#f1f6ff";
-    ctx.font = mode === "lock" ? "500 34px Inter" : "500 30px Inter";
-    drawWrappedText(ctx, subline, side, safeTop + 292, w - side * 2, mode === "lock" ? 44 : 38);
-
-    const qrCardW = mode === "lock" ? 690 : 760;
-    const qrCardH = mode === "lock" ? 760 : 840;
-    const qrCardX = (w - qrCardW) / 2;
-    const qrCardY = mode === "lock" ? h * 0.42 : h * 0.40;
-
-    ctx.shadowColor = "rgba(0,0,0,.28)";
-    ctx.shadowBlur = 34;
-    ctx.fillStyle = "rgba(255,255,255,.96)";
-    roundRect(ctx, qrCardX, qrCardY, qrCardW, qrCardH, 42, true, false);
-    ctx.shadowBlur = 0;
-
-    ctx.strokeStyle = "rgba(255,255,255,.72)";
-    ctx.lineWidth = 2;
-    roundRect(ctx, qrCardX, qrCardY, qrCardW, qrCardH, 42, false, true);
-
-    ctx.textAlign = "center";
-    ctx.fillStyle = accent.dark;
-    ctx.font = mode === "lock" ? "800 28px Inter" : "800 34px Inter";
-    ctx.fillText(el("artQrLabel").textContent, w / 2, qrCardY + 66);
-
-    const qrSize = mode === "lock" ? 500 : 560;
-    const qrX = (w - qrSize) / 2;
-    const qrY = qrCardY + 105;
-
-    ctx.fillStyle = "#ffffff";
-    ctx.strokeStyle = "#e5eef9";
-    ctx.lineWidth = 2;
-    roundRect(ctx, qrX - 20, qrY - 20, qrSize + 40, qrSize + 40, 28, true, true);
-    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
-
-    ctx.fillStyle = "#f5b300";
-    ctx.font = mode === "lock" ? "800 50px Inter" : "800 54px Inter";
-    ctx.fillText("★★★★★", w / 2, qrY + qrSize + 110);
-
-    ctx.fillStyle = "#3d587a";
-    ctx.font = mode === "lock" ? "500 32px Inter" : "500 34px Inter";
-    drawWrappedTextCentered(ctx, bottomText, w / 2, qrY + qrSize + 170, w * 0.72, mode === "lock" ? 42 : 44);
-
-    const pillW = mode === "lock" ? 520 : 560;
-    const pillH = mode === "lock" ? 86 : 96;
-    const pillX = (w - pillW) / 2;
-    const pillY = h - (mode === "lock" ? 240 : 210);
-
-    ctx.fillStyle = "rgba(255,255,255,.92)";
-    ctx.strokeStyle = "rgba(255,255,255,.72)";
-    ctx.lineWidth = 2;
-    roundRect(ctx, pillX, pillY, pillW, pillH, pillH / 2, true, true);
-
-    ctx.fillStyle = "#153055";
-    ctx.font = mode === "lock" ? "800 40px Inter" : "800 44px Inter";
-    ctx.fillText(phone, w / 2, pillY + pillH / 2 + 14);
-
-    return true;
-  }
-
-  async function downloadReviewCard() {
-    const canvas = el("exportCanvas");
-    const ok = await renderDesign(canvas, "card");
-    if (!ok) return;
-    const a = document.createElement("a");
-    a.href = canvas.toDataURL("image/png");
-    a.download = "review-card.png";
-    a.click();
-    showMessage("Review card downloaded.", "ok");
-  }
-
-  async function downloadLockscreen() {
-    const canvas = el("lockscreenCanvas");
-    const ok = await renderDesign(canvas, "lock");
-    if (!ok) return;
-    const a = document.createElement("a");
-    a.href = canvas.toDataURL("image/png");
-    a.download = "lock-screen.png";
-    a.click();
-    showMessage("Lock screen downloaded.", "ok");
-  }
-
-  function loadExample() {
-    el("companyName").value = "The Carpet Cleaning Company";
-    el("tagline").value = "Professional carpet and upholstery cleaning";
-    el("phone").value = "07802563213";
-    el("headlineText").value = "Thanks for choosing us";
-    el("sublineText").value = "If you were happy with the clean, please scan below and leave us a quick review.";
-    el("reviewLink").value = "https://share.google/lSXNdkbJIC5QM8Qu2";
-    el("websiteLink").value = "https://www.thecarpetcleaningcrew.co.uk";
-    el("facebookLink").value = "https://www.facebook.com";
-    el("customLink").value = "Thank you for choosing us";
-    el("bottomText").value = "Your feedback really helps our business and helps other local customers choose us with confidence.";
-    el("accentColor").value = "blue";
-    el("badgeMode").value = "wand";
-    uploadedLogo = null;
-    uploadedHero = null;
-    qrReady = false;
-    setTarget("review");
-    updateAllPreviewOnly();
-    showMessage("Example loaded.", "ok");
-  }
-
-  el("logoUpload").addEventListener("change", async function(e) {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    uploadedLogo = await readFileAsDataURL(file);
-    updateAllPreviewOnly();
-    showMessage("Logo uploaded.", "ok");
-  });
-
-  el("heroUpload").addEventListener("change", async function(e) {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    uploadedHero = await readFileAsDataURL(file);
-    updateAllPreviewOnly();
-    showMessage("Background image uploaded.", "ok");
-  });
-
-  document.querySelectorAll(".choice").forEach(btn => {
-    btn.addEventListener("click", function() {
-      setTarget(btn.dataset.target);
-    });
-  });
-
-  [
-    "companyName",
-    "tagline",
-    "phone",
-    "headlineText",
-    "sublineText",
-    "reviewLink",
-    "websiteLink",
-    "facebookLink",
-    "customLink",
-    "accentColor",
-    "badgeMode",
-    "bottomText"
-  ].forEach(id => {
-    el(id).addEventListener("input", updateAllPreviewOnly);
-    el(id).addEventListener("change", updateAllPreviewOnly);
-  });
-
-  el("generateBtn").addEventListener("click", generateQR);
-  el("previewGenerateBtn").addEventListener("click", generateQR);
-  el("downloadQrBtn").addEventListener("click", downloadQR);
-  el("downloadCardBtn").addEventListener("click", downloadReviewCard);
-  el("previewCardBtn").addEventListener("click", downloadReviewCard);
-  el("downloadLockBtn").addEventListener("click", downloadLockscreen);
-  el("previewLockBtn").addEventListener("click", downloadLockscreen);
-  el("exampleBtn").addEventListener("click", loadExample);
-
-  window.addEventListener("load", loadExample);
+    window.addEventListener("load", loadExample);
   </script>
 </body>
 </html>
