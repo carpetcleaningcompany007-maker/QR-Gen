@@ -23,7 +23,6 @@
       --brand-dark:#1f5dd7;
       --gold:#f3c34d;
       --shadow:0 20px 50px rgba(0,0,0,.28);
-      --radius:26px;
       --max:1380px;
       --success:#19a35b;
       --success-dark:#128046;
@@ -476,17 +475,30 @@
       box-shadow:var(--shadow);
     }
 
-    .review-art{
-      position:relative;
-      width:min(100%, 500px);
-      aspect-ratio:500 / 880;
-      min-height:880px;
+    .preview-stage{
+      width:100%;
+      max-width:500px;
       margin:0 auto;
+    }
+
+    .preview-phone{
+      position:relative;
+      width:100%;
+      aspect-ratio:500 / 880;
       border-radius:36px;
       overflow:hidden;
-      background:#20324f;
       border:1px solid rgba(255,255,255,.12);
       box-shadow:0 24px 50px rgba(0,0,0,.24);
+      background:#20324f;
+    }
+
+    .preview-scale{
+      position:absolute;
+      left:0;
+      top:0;
+      width:500px;
+      height:880px;
+      transform-origin:top left;
     }
 
     .review-bg{
@@ -503,6 +515,8 @@
       background:
         linear-gradient(180deg, rgba(8,16,29,.18), rgba(8,16,29,.28)),
         linear-gradient(180deg, rgba(8,16,29,.08) 0%, rgba(8,16,29,.55) 100%);
+      z-index:1;
+      pointer-events:none;
     }
 
     .review-top{
@@ -680,7 +694,8 @@
 
     .contact-pill{
       position:relative;
-      z-index:2;
+      z-index:4;
+      display:block;
       margin:18px auto 0;
       max-width:360px;
       text-align:center;
@@ -696,7 +711,7 @@
 
     .live-link-wrap{
       position:relative;
-      z-index:2;
+      z-index:5;
       display:flex;
       justify-content:center;
       margin-top:12px;
@@ -706,7 +721,6 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:10px;
       min-width:320px;
       max-width:360px;
       text-align:center;
@@ -719,6 +733,9 @@
       font-weight:800;
       box-shadow:0 14px 28px rgba(31,93,215,.28);
       transition:.18s ease;
+      position:relative;
+      z-index:6;
+      pointer-events:auto;
     }
 
     .live-link-btn:hover{
@@ -801,26 +818,7 @@
       .hero-card{padding:24px}
       .two,.three,.actions-two,.actions-three,.choice-grid,.stats,.preview-actions,.preview-actions.secondary-row,.share-actions{grid-template-columns:1fr}
       .panel-head,.panel-body{padding-left:18px;padding-right:18px}
-
-      .review-art{
-        width:min(100%, 500px);
-        aspect-ratio:500 / 880;
-        min-height:auto;
-      }
-
-      .review-title{font-size:48px}
-      .review-qr-card{width:340px}
       .hero-mini{width:220px}
-      .live-link-btn{min-width:320px}
-    }
-
-    @media (max-width:420px){
-      .review-title{font-size:42px}
-      .review-sub{font-size:15px}
-      .review-qr-card{width:320px}
-      .contact-pill{max-width:330px}
-      .live-link-btn{min-width:300px;max-width:330px}
-      .bottom-copy{max-width:330px}
     }
   </style>
 </head>
@@ -833,7 +831,7 @@
           <div class="brand-badge">QR</div>
           <div class="brand-copy">
             <strong>Carpet Cleaner QR Studio</strong>
-            <span>Working QR builder with logo upload, matching preview layout, downloads and customer sharing</span>
+            <span>Working QR builder with logo upload, matching mobile preview and live clickable links</span>
           </div>
         </div>
       </div>
@@ -872,7 +870,7 @@
         <section class="panel">
           <div class="panel-head">
             <h2>Studio setup</h2>
-            <p>This version keeps the mobile preview much closer to the web version, improves the review wording and can share the finished card image with the live link.</p>
+            <p>This version fixes the mobile card scaling and makes the live buttons actually clickable on the page.</p>
           </div>
           <div class="panel-body">
 
@@ -1003,55 +1001,64 @@
           <div class="stats">
             <div class="stat">
               <strong>Working</strong>
-              <span>Generate QR fixed</span>
+              <span>Preview scales properly</span>
             </div>
             <div class="stat">
               <strong>Working</strong>
               <span>Logo upload fixed</span>
             </div>
             <div class="stat">
-              <strong>Better</strong>
-              <span>Mobile layout matched much closer to web version</span>
+              <strong>Working</strong>
+              <span>Live buttons clickable</span>
             </div>
           </div>
 
           <div class="preview-shell">
-            <div class="review-art" id="reviewArt">
-              <div class="review-bg" id="reviewBg"></div>
-              <div class="review-overlay"></div>
+            <div class="preview-stage">
+              <div class="preview-phone" id="previewPhone">
+                <div class="preview-scale" id="previewScale">
+                  <div class="review-bg" id="reviewBg"></div>
+                  <div class="review-overlay"></div>
 
-              <div class="review-top">
-                <div class="review-brand">
-                  <div class="review-badge" id="reviewBadge">
-                    <div class="wand-icon"></div>
+                  <div class="review-top">
+                    <div class="review-brand">
+                      <div class="review-badge" id="reviewBadge">
+                        <div class="wand-icon"></div>
+                      </div>
+                      <div class="review-company">
+                        <strong id="artCompanyName">Your Company Name</strong>
+                        <small id="artTagline">Professional carpet cleaning</small>
+                      </div>
+                    </div>
+
+                    <div class="review-title" id="artHeadline">Thanks for choosing us</div>
+                    <div class="review-sub" id="artSubline">If you were happy with the clean, please scan below and leave us a quick review.</div>
                   </div>
-                  <div class="review-company">
-                    <strong id="artCompanyName">Your Company Name</strong>
-                    <small id="artTagline">Professional carpet cleaning</small>
+
+                  <div class="review-mid">
+                    <div class="review-qr-card">
+                      <div class="qr-head" id="artQrLabel">SCAN TO LEAVE A REVIEW</div>
+                      <div class="qr-box">
+                        <canvas id="qrPreviewCanvas" width="500" height="500"></canvas>
+                      </div>
+                    </div>
+
+                    <div class="stars" id="artStars">★★★★★</div>
+                    <div class="bottom-copy" id="artBottomCopy">Your feedback really helps our business and helps other local customers choose us with confidence.</div>
+
+                    <a href="#" target="_blank" rel="noopener" class="contact-pill" id="artCtaButtonLink">
+                      <span id="artCtaButton">Please give us a Google review</span>
+                    </a>
+
+                    <div class="live-link-wrap">
+                      <a href="#" target="_blank" rel="noopener" class="live-link-btn" id="liveActionLink">Open our Google review page</a>
+                    </div>
+
+                    <a href="tel:07802563213" class="contact-pill" id="artContactLink" style="margin-top:12px;">
+                      <span id="artContact">07802563213</span>
+                    </a>
                   </div>
                 </div>
-
-                <div class="review-title" id="artHeadline">Thanks for choosing us</div>
-                <div class="review-sub" id="artSubline">If you were happy with the clean, please scan below and leave us a quick review.</div>
-              </div>
-
-              <div class="review-mid">
-                <div class="review-qr-card">
-                  <div class="qr-head" id="artQrLabel">SCAN TO LEAVE A REVIEW</div>
-                  <div class="qr-box">
-                    <canvas id="qrPreviewCanvas" width="500" height="500"></canvas>
-                  </div>
-                </div>
-
-                <div class="stars" id="artStars">★★★★★</div>
-                <div class="bottom-copy" id="artBottomCopy">Your feedback really helps our business and helps other local customers choose us with confidence.</div>
-                <div class="contact-pill" id="artCtaButton">Please give us a Google review</div>
-
-                <div class="live-link-wrap">
-                  <a href="#" target="_blank" rel="noopener" class="live-link-btn" id="liveActionLink">Open our Google review page</a>
-                </div>
-
-                <div class="contact-pill" id="artContact" style="margin-top:12px;">07802563213</div>
               </div>
             </div>
 
@@ -1079,7 +1086,7 @@
     <div class="container">
       <div class="footer-card">
         <div class="small">Carpet Cleaner QR Studio</div>
-        <div class="small">Working QR builder with logo upload, matching preview layout, downloads and customer sharing</div>
+        <div class="small">Working QR builder with logo upload, proper mobile scaling and live clickable links</div>
       </div>
     </div>
   </footer>
@@ -1096,6 +1103,8 @@
     let uploadedHero = null;
     let qrReady = false;
 
+    const BASE_PREVIEW_W = 500;
+    const BASE_PREVIEW_H = 880;
     const defaultHero = "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1600&q=80";
 
     function getAccent() {
@@ -1110,31 +1119,11 @@
 
     function getTextColors() {
       const map = {
-        white: {
-          main: "#ffffff",
-          soft: "#eef5ff",
-          shadow: "rgba(0,0,0,.22)"
-        },
-        black: {
-          main: "#111111",
-          soft: "#222222",
-          shadow: "rgba(255,255,255,.08)"
-        },
-        navy: {
-          main: "#153055",
-          soft: "#21456f",
-          shadow: "rgba(255,255,255,.08)"
-        },
-        blue: {
-          main: "#dbe8ff",
-          soft: "#bcd3ff",
-          shadow: "rgba(0,0,0,.18)"
-        },
-        gold: {
-          main: "#ffd76a",
-          soft: "#ffe7a6",
-          shadow: "rgba(0,0,0,.18)"
-        }
+        white: { main:"#ffffff", soft:"#eef5ff", shadow:"rgba(0,0,0,.22)" },
+        black: { main:"#111111", soft:"#222222", shadow:"rgba(255,255,255,.08)" },
+        navy:  { main:"#153055", soft:"#21456f", shadow:"rgba(255,255,255,.08)" },
+        blue:  { main:"#dbe8ff", soft:"#bcd3ff", shadow:"rgba(0,0,0,.18)" },
+        gold:  { main:"#ffd76a", soft:"#ffe7a6", shadow:"rgba(0,0,0,.18)" }
       };
       return map[el("textColor").value] || map.white;
     }
@@ -1191,20 +1180,6 @@
       };
     }
 
-    function setTarget(target) {
-      qrTarget = target;
-      document.querySelectorAll(".choice").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.target === target);
-      });
-
-      el("reviewFieldWrap").style.display = target === "review" ? "" : "none";
-      el("websiteFieldWrap").style.display = target === "website" ? "" : "none";
-      el("facebookFieldWrap").style.display = target === "facebook" ? "" : "none";
-      el("customFieldWrap").style.display = target === "custom" ? "" : "none";
-
-      updateAllPreviewOnly();
-    }
-
     function getQRText() {
       if (qrTarget === "review") return el("reviewLink").value.trim();
       if (qrTarget === "website") return el("websiteLink").value.trim();
@@ -1218,6 +1193,20 @@
       const meta = getTargetMeta();
       const link = getQRText();
       return `${meta.shareText}\n\n${link}\n\n${company}`;
+    }
+
+    function setTarget(target) {
+      qrTarget = target;
+      document.querySelectorAll(".choice").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.target === target);
+      });
+
+      el("reviewFieldWrap").style.display = target === "review" ? "" : "none";
+      el("websiteFieldWrap").style.display = target === "website" ? "" : "none";
+      el("facebookFieldWrap").style.display = target === "facebook" ? "" : "none";
+      el("customFieldWrap").style.display = target === "custom" ? "" : "none";
+
+      updateAllPreviewOnly();
     }
 
     function readFileAsDataURL(file) {
@@ -1278,22 +1267,45 @@
       }
     }
 
-    function updateLiveActionLink() {
+    function applyPreviewScale() {
+      const phone = el("previewPhone");
+      const scaleWrap = el("previewScale");
+      const width = phone.clientWidth || BASE_PREVIEW_W;
+      const scale = width / BASE_PREVIEW_W;
+      scaleWrap.style.transform = `scale(${scale})`;
+      phone.style.height = `${BASE_PREVIEW_H * scale}px`;
+    }
+
+    function updateLiveLinks() {
       const meta = getTargetMeta();
       const link = getQRText();
+      const phone = el("phone").value.trim() || "07802563213";
+
       const liveBtn = el("liveActionLink");
+      const ctaBtnLink = el("artCtaButtonLink");
+      const contactLink = el("artContactLink");
 
       liveBtn.textContent = meta.liveButton;
+      el("artCtaButton").textContent = meta.cta;
+      el("artContact").textContent = phone;
 
       if (link) {
         liveBtn.href = link;
+        ctaBtnLink.href = link;
         liveBtn.style.pointerEvents = "auto";
+        ctaBtnLink.style.pointerEvents = "auto";
         liveBtn.style.opacity = "1";
+        ctaBtnLink.style.opacity = "1";
       } else {
         liveBtn.href = "#";
+        ctaBtnLink.href = "#";
         liveBtn.style.pointerEvents = "none";
+        ctaBtnLink.style.pointerEvents = "none";
         liveBtn.style.opacity = ".7";
+        ctaBtnLink.style.opacity = ".85";
       }
+
+      contactLink.href = `tel:${phone.replace(/\s+/g, "")}`;
     }
 
     function updatePreviewText() {
@@ -1312,8 +1324,6 @@
       el("artHeadline").textContent = customHeadline || meta.heading;
       el("artSubline").textContent = customSub || meta.sub;
       el("artBottomCopy").textContent = customBottom || meta.bottom;
-      el("artCtaButton").textContent = meta.cta;
-      el("artContact").textContent = el("phone").value.trim() || "07802563213";
       el("artQrLabel").textContent = meta.label;
       el("artStars").textContent = qrTarget === "review" ? "★★★★★  5 STAR GOOGLE REVIEWS" : "★★★★★";
 
@@ -1339,8 +1349,9 @@
       updateThumbs();
       updatePreviewText();
       updatePreviewBackground();
-      updateLiveActionLink();
+      updateLiveLinks();
       renderBadgeHTML(el("reviewBadge"));
+      applyPreviewScale();
     }
 
     function showMessage(msg, type) {
@@ -1373,7 +1384,7 @@
       });
 
       qrReady = true;
-      updateLiveActionLink();
+      updateLiveLinks();
       showMessage("QR generated.", "ok");
       return true;
     }
@@ -1441,7 +1452,6 @@
         }
       }
       if (line.trim()) ctx.fillText(line.trim(), x, yy);
-      return yy;
     }
 
     function drawWrappedTextCentered(ctx, text, x, y, maxWidth, lineHeight) {
@@ -1460,7 +1470,6 @@
         }
       }
       if (line.trim()) ctx.fillText(line.trim(), x, yy);
-      return yy;
     }
 
     async function drawBadgeOnCanvas(ctx, x, y, size) {
@@ -1543,38 +1552,26 @@
       drawWrappedText(ctx, tagline, side + 138, safeTop + 88, w - side * 2 - 146, mode === "share" ? 28 : 34);
 
       ctx.fillStyle = tc.main;
-      if (mode === "lock") {
-        ctx.font = "700 86px Playfair Display";
-      } else if (mode === "share") {
-        ctx.font = "700 66px Playfair Display";
-      } else {
-        ctx.font = "700 78px Playfair Display";
-      }
+      if (mode === "lock") ctx.font = "700 86px Playfair Display";
+      else if (mode === "share") ctx.font = "700 66px Playfair Display";
+      else ctx.font = "700 78px Playfair Display";
+
       drawWrappedText(ctx, headline, side, safeTop + (mode === "share" ? 170 : 200), w - side * 2, mode === "share" ? 72 : (mode === "lock" ? 92 : 84));
 
       ctx.fillStyle = tc.soft;
-      if (mode === "share") {
-        ctx.font = "500 26px Inter";
-      } else if (mode === "lock") {
-        ctx.font = "500 34px Inter";
-      } else {
-        ctx.font = "500 30px Inter";
-      }
+      if (mode === "share") ctx.font = "500 26px Inter";
+      else if (mode === "lock") ctx.font = "500 34px Inter";
+      else ctx.font = "500 30px Inter";
+
       drawWrappedText(ctx, subline, side, safeTop + (mode === "share" ? 250 : 292), w - side * 2, mode === "share" ? 34 : (mode === "lock" ? 44 : 38));
 
       let qrCardW, qrCardH, qrCardY;
       if (mode === "lock") {
-        qrCardW = 690;
-        qrCardH = 760;
-        qrCardY = h * 0.42;
+        qrCardW = 690; qrCardH = 760; qrCardY = h * 0.42;
       } else if (mode === "share") {
-        qrCardW = 560;
-        qrCardH = 640;
-        qrCardY = h * 0.34;
+        qrCardW = 560; qrCardH = 640; qrCardY = h * 0.34;
       } else {
-        qrCardW = 760;
-        qrCardH = 840;
-        qrCardY = h * 0.40;
+        qrCardW = 760; qrCardH = 840; qrCardY = h * 0.40;
       }
 
       const qrCardX = (w - qrCardW) / 2;
@@ -1591,13 +1588,10 @@
 
       ctx.textAlign = "center";
       ctx.fillStyle = accent.dark;
-      if (mode === "share") {
-        ctx.font = "800 24px Inter";
-      } else if (mode === "lock") {
-        ctx.font = "800 28px Inter";
-      } else {
-        ctx.font = "800 34px Inter";
-      }
+      if (mode === "share") ctx.font = "800 24px Inter";
+      else if (mode === "lock") ctx.font = "800 28px Inter";
+      else ctx.font = "800 34px Inter";
+
       ctx.fillText(meta.label, w / 2, qrCardY + (mode === "share" ? 52 : 66));
 
       let qrSize;
@@ -1615,70 +1609,46 @@
       ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
       ctx.fillStyle = "#f5c84c";
-      if (mode === "share") {
-        ctx.font = "800 34px Inter";
-      } else if (mode === "lock") {
-        ctx.font = "800 44px Inter";
-      } else {
-        ctx.font = "800 50px Inter";
-      }
+      if (mode === "share") ctx.font = "800 34px Inter";
+      else if (mode === "lock") ctx.font = "800 44px Inter";
+      else ctx.font = "800 50px Inter";
+
       ctx.fillText(qrTarget === "review" ? "★★★★★  5 STAR GOOGLE REVIEWS" : "★★★★★", w / 2, qrY + qrSize + (mode === "share" ? 86 : 110));
 
       ctx.fillStyle = tc.main;
-      if (mode === "share") {
-        ctx.font = "500 25px Inter";
-      } else if (mode === "lock") {
-        ctx.font = "500 32px Inter";
-      } else {
-        ctx.font = "500 34px Inter";
-      }
+      if (mode === "share") ctx.font = "500 25px Inter";
+      else if (mode === "lock") ctx.font = "500 32px Inter";
+      else ctx.font = "500 34px Inter";
+
       drawWrappedTextCentered(ctx, bottomText, w / 2, qrY + qrSize + (mode === "share" ? 126 : 150), w * (mode === "share" ? 0.68 : 0.72), mode === "share" ? 32 : (mode === "lock" ? 42 : 44));
 
       let ctaW, ctaH, ctaY;
       if (mode === "lock") {
-        ctaW = 620;
-        ctaH = 78;
-        ctaY = h - 345;
+        ctaW = 620; ctaH = 78; ctaY = h - 345;
       } else if (mode === "share") {
-        ctaW = 520;
-        ctaH = 68;
-        ctaY = h - 290;
+        ctaW = 520; ctaH = 68; ctaY = h - 290;
       } else {
-        ctaW = 660;
-        ctaH = 86;
-        ctaY = h - 320;
+        ctaW = 660; ctaH = 86; ctaY = h - 320;
       }
 
       const ctaX = (w - ctaW) / 2;
-
       ctx.fillStyle = "rgba(255,255,255,.95)";
       ctx.strokeStyle = "rgba(255,255,255,.80)";
       ctx.lineWidth = 2;
       roundRect(ctx, ctaX, ctaY, ctaW, ctaH, ctaH / 2, true, true);
 
       ctx.fillStyle = "#153055";
-      if (mode === "share") {
-        ctx.font = "800 26px Inter";
-      } else if (mode === "lock") {
-        ctx.font = "800 30px Inter";
-      } else {
-        ctx.font = "800 32px Inter";
-      }
+      if (mode === "share") ctx.font = "800 26px Inter";
+      else if (mode === "lock") ctx.font = "800 30px Inter";
+      else ctx.font = "800 32px Inter";
       ctx.fillText(meta.cta, w / 2, ctaY + ctaH / 2 + (mode === "share" ? 9 : 10));
 
-      let liveW, liveH, liveY;
       if (mode === "share") {
-        liveW = 560;
-        liveH = 76;
-        liveY = h - 205;
-      } else {
-        liveW = 0;
-        liveH = 0;
-        liveY = 0;
-      }
-
-      if (mode === "share") {
+        const liveW = 560;
+        const liveH = 76;
+        const liveY = h - 205;
         const liveX = (w - liveW) / 2;
+
         const grad = ctx.createLinearGradient(liveX, liveY, liveX + liveW, liveY + liveH);
         grad.addColorStop(0, accent.main);
         grad.addColorStop(1, accent.dark);
@@ -1694,34 +1664,23 @@
 
       let pillW, pillH, pillY;
       if (mode === "lock") {
-        pillW = 520;
-        pillH = 86;
-        pillY = h - 240;
+        pillW = 520; pillH = 86; pillY = h - 240;
       } else if (mode === "share") {
-        pillW = 420;
-        pillH = 72;
-        pillY = h - 108;
+        pillW = 420; pillH = 72; pillY = h - 108;
       } else {
-        pillW = 560;
-        pillH = 96;
-        pillY = h - 210;
+        pillW = 560; pillH = 96; pillY = h - 210;
       }
 
       const pillX = (w - pillW) / 2;
-
       ctx.fillStyle = "rgba(255,255,255,.92)";
       ctx.strokeStyle = "rgba(255,255,255,.72)";
       ctx.lineWidth = 2;
       roundRect(ctx, pillX, pillY, pillW, pillH, pillH / 2, true, true);
 
       ctx.fillStyle = "#153055";
-      if (mode === "share") {
-        ctx.font = "800 34px Inter";
-      } else if (mode === "lock") {
-        ctx.font = "800 40px Inter";
-      } else {
-        ctx.font = "800 44px Inter";
-      }
+      if (mode === "share") ctx.font = "800 34px Inter";
+      else if (mode === "lock") ctx.font = "800 40px Inter";
+      else ctx.font = "800 44px Inter";
       ctx.fillText(phone, w / 2, pillY + pillH / 2 + (mode === "share" ? 11 : 14));
 
       return true;
@@ -1891,7 +1850,11 @@
     el("previewShareBtn").addEventListener("click", shareWithCustomer);
     el("textCustomerBtn").addEventListener("click", textCustomer);
 
-    window.addEventListener("load", loadExample);
+    window.addEventListener("resize", applyPreviewScale);
+    window.addEventListener("load", () => {
+      loadExample();
+      applyPreviewScale();
+    });
   </script>
 </body>
 </html>
