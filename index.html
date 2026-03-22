@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Carpet Cleaner QR Studio</title>
-  <meta name="description" content="Create premium QR review cards and lock screen wallpapers for carpet cleaning businesses.">
-  <meta name="theme-color" content="#f4f8ff">
+  <meta name="description" content="Premium QR review card and lock screen generator for carpet cleaning businesses.">
+  <meta name="theme-color" content="#0f172a">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
@@ -13,18 +13,23 @@
 
   <style>
     :root{
-      --bg:#f5f8fd;
-      --bg2:#edf4ff;
-      --panel:#ffffff;
-      --line:#d8e4f2;
-      --text:#12253f;
-      --muted:#5d7491;
+      --bg:#08101d;
+      --bg2:#0f1a2f;
+      --panel:rgba(255,255,255,.08);
+      --panel-solid:#ffffff;
+      --line:rgba(255,255,255,.10);
+      --line-light:#dfe8f5;
+      --text:#ecf3ff;
+      --text-dark:#14233c;
+      --muted:#a7bad7;
+      --muted-dark:#5c7391;
       --brand:#2f7cf6;
       --brand-dark:#1f5dd7;
-      --gold:#f4c24d;
-      --shadow:0 18px 45px rgba(18,37,63,.10);
-      --radius:24px;
-      --max:1360px;
+      --gold:#f3c34d;
+      --shadow:0 24px 60px rgba(0,0,0,.30);
+      --shadow-light:0 18px 45px rgba(20,35,60,.12);
+      --radius:26px;
+      --max:1380px;
     }
 
     *{box-sizing:border-box}
@@ -34,14 +39,16 @@
       font-family:Inter,system-ui,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at top left, rgba(47,124,246,.10), transparent 24%),
-        radial-gradient(circle at bottom right, rgba(244,194,77,.12), transparent 28%),
-        linear-gradient(180deg,#f9fbff 0%, #eef5ff 100%);
+        radial-gradient(circle at top left, rgba(47,124,246,.16), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(243,195,77,.10), transparent 25%),
+        linear-gradient(180deg, #08101d 0%, #0d1728 100%);
+      min-height:100vh;
+      overflow-x:hidden;
     }
 
     a{text-decoration:none;color:inherit}
     img{max-width:100%;display:block}
-    .container{width:min(var(--max),calc(100% - 28px));margin:0 auto}
+    .container{width:min(var(--max), calc(100% - 28px)); margin:0 auto}
 
     .topbar{padding:18px 0 0}
     .topbar-inner{
@@ -49,12 +56,12 @@
       align-items:center;
       justify-content:space-between;
       gap:16px;
-      background:rgba(255,255,255,.92);
       border:1px solid var(--line);
-      border-radius:20px;
+      background:rgba(255,255,255,.05);
+      backdrop-filter:blur(12px);
+      border-radius:22px;
       padding:14px 18px;
       box-shadow:var(--shadow);
-      backdrop-filter:blur(8px);
     }
 
     .brand{
@@ -65,16 +72,16 @@
     }
 
     .brand-badge{
-      width:48px;
-      height:48px;
+      width:50px;
+      height:50px;
       border-radius:16px;
       display:grid;
       place-items:center;
       background:linear-gradient(135deg,var(--brand),var(--brand-dark));
       color:#fff;
-      font-weight:800;
       font-size:22px;
-      box-shadow:0 12px 24px rgba(47,124,246,.22);
+      font-weight:800;
+      box-shadow:0 14px 30px rgba(47,124,246,.28);
       flex:0 0 auto;
     }
 
@@ -86,69 +93,9 @@
 
     .brand-copy span{
       display:block;
-      font-size:12px;
-      color:var(--muted);
       margin-top:4px;
-    }
-
-    .hero{
-      padding:22px 0 22px;
-    }
-
-    .hero-card{
-      overflow:hidden;
-      border:1px solid var(--line);
-      border-radius:34px;
-      box-shadow:var(--shadow);
-      background:
-        radial-gradient(circle at top right, rgba(47,124,246,.12), transparent 24%),
-        radial-gradient(circle at bottom left, rgba(244,194,77,.14), transparent 26%),
-        linear-gradient(135deg,#ffffff 0%, #f4f9ff 100%);
-      padding:36px;
-    }
-
-    .hero-grid{
-      display:grid;
-      grid-template-columns:1.08fr .92fr;
-      gap:24px;
-      align-items:center;
-    }
-
-    .eyebrow{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
-      background:#edf5ff;
-      color:var(--brand-dark);
-      border:1px solid #d9e8ff;
-      font-size:13px;
-      font-weight:800;
-      margin-bottom:14px;
-    }
-
-    h1{
-      margin:0;
-      font-size:clamp(36px,5vw,68px);
-      line-height:1.02;
-      letter-spacing:-.05em;
-      max-width:760px;
-    }
-
-    .hero p{
-      margin:16px 0 0;
       color:var(--muted);
-      font-size:18px;
-      line-height:1.72;
-      max-width:760px;
-    }
-
-    .hero-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:24px;
+      font-size:12px;
     }
 
     .btn{
@@ -168,29 +115,88 @@
     .btn-primary{
       color:#fff;
       background:linear-gradient(135deg,var(--brand),var(--brand-dark));
-      box-shadow:0 14px 28px rgba(47,124,246,.22);
+      box-shadow:0 16px 34px rgba(47,124,246,.24);
     }
 
     .btn-secondary{
-      color:var(--text);
-      background:#fff;
-      border:1px solid var(--line);
+      color:#eef4ff;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
     }
 
     .btn-gold{
-      color:#5a4200;
-      background:linear-gradient(135deg,#ffe08a,#f4c24d);
-      box-shadow:0 14px 28px rgba(244,194,77,.18);
+      color:#5d4200;
+      background:linear-gradient(135deg,#ffe08a,#f3c34d);
+      box-shadow:0 16px 34px rgba(243,195,77,.20);
+    }
+
+    .hero{
+      padding:22px 0 22px;
+    }
+
+    .hero-card{
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:36px;
+      box-shadow:var(--shadow);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+        linear-gradient(180deg, rgba(11,19,34,.72), rgba(11,19,34,.82));
+      padding:38px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:28px;
+      align-items:center;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#dbe8ff;
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:14px;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(38px,5vw,72px);
+      line-height:1.01;
+      letter-spacing:-.05em;
+      max-width:800px;
+    }
+
+    .hero p{
+      margin:16px 0 0;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.72;
+      max-width:760px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:24px;
     }
 
     .hero-art{
       position:relative;
-      min-height:430px;
-      border-radius:28px;
+      min-height:460px;
+      border-radius:30px;
       overflow:hidden;
-      border:1px solid var(--line);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.8), var(--shadow);
-      background:#dfeeff;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      background:#1a2942;
     }
 
     .hero-art::before{
@@ -198,22 +204,23 @@
       position:absolute;
       inset:0;
       background:
-        linear-gradient(180deg, rgba(255,255,255,.18), rgba(18,37,63,.12)),
+        linear-gradient(180deg, rgba(9,16,29,.20), rgba(9,16,29,.38)),
         url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1400&q=80");
       background-size:cover;
       background-position:center;
+      transform:scale(1.03);
     }
 
     .hero-mini{
       position:absolute;
       right:22px;
       bottom:22px;
-      width:260px;
-      background:rgba(255,255,255,.94);
-      border:1px solid #d9e8f7;
+      width:270px;
       border-radius:24px;
+      background:rgba(255,255,255,.93);
+      border:1px solid rgba(255,255,255,.7);
       padding:16px;
-      box-shadow:0 16px 34px rgba(18,37,63,.16);
+      box-shadow:0 18px 36px rgba(15,23,42,.20);
       z-index:2;
     }
 
@@ -221,8 +228,8 @@
       text-align:center;
       font-size:12px;
       font-weight:800;
-      color:var(--brand-dark);
       letter-spacing:.04em;
+      color:#1f5dd7;
       margin-bottom:10px;
     }
 
@@ -252,7 +259,7 @@
     .hero-mini-copy{
       margin-top:8px;
       text-align:center;
-      color:var(--muted);
+      color:#5c7391;
       font-size:13px;
       line-height:1.45;
     }
@@ -269,11 +276,13 @@
     }
 
     .panel{
-      background:#fff;
       border:1px solid var(--line);
-      border-radius:28px;
-      box-shadow:var(--shadow);
+      border-radius:30px;
       overflow:hidden;
+      box-shadow:var(--shadow);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
+        linear-gradient(180deg, rgba(10,18,32,.72), rgba(10,18,32,.82));
     }
 
     .panel-head{
@@ -305,14 +314,14 @@
       margin-bottom:10px;
       font-size:14px;
       font-weight:700;
-      color:#203656;
+      color:#e7efff;
     }
 
     input,select,textarea{
       width:100%;
-      border:1px solid #d8e8f7;
-      background:#fbfdff;
-      color:var(--text);
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#fff;
       border-radius:16px;
       padding:15px 16px;
       font:500 15px Inter,system-ui,Arial,sans-serif;
@@ -326,13 +335,13 @@
     }
 
     input::placeholder,textarea::placeholder{
-      color:#8aa3bf;
+      color:#a5b7d3;
     }
 
     input:focus,select:focus,textarea:focus{
-      border-color:#82b5ff;
+      border-color:rgba(130,181,255,.85);
       box-shadow:0 0 0 4px rgba(47,124,246,.12);
-      background:#fff;
+      background:rgba(255,255,255,.08);
     }
 
     .two{
@@ -366,9 +375,9 @@
     }
 
     .choice{
-      border:1px solid #d8e8ff;
-      background:#f8fbff;
-      color:#1f3553;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#edf4ff;
       border-radius:16px;
       padding:14px 10px;
       text-align:center;
@@ -379,18 +388,20 @@
       transition:.18s ease;
     }
 
-    .choice:hover{background:#eef6ff}
+    .choice:hover{
+      background:rgba(255,255,255,.10);
+    }
 
     .choice.active{
       background:linear-gradient(135deg,var(--brand),var(--brand-dark));
-      color:#fff;
       border-color:transparent;
-      box-shadow:0 12px 22px rgba(47,124,246,.18);
+      color:#fff;
+      box-shadow:0 14px 26px rgba(47,124,246,.20);
     }
 
     .upload-box{
-      border:1px dashed #bad2ed;
-      background:#f8fbff;
+      border:1px dashed rgba(255,255,255,.16);
+      background:rgba(255,255,255,.05);
       border-radius:22px;
       padding:16px;
     }
@@ -406,12 +417,12 @@
       width:80px;
       height:80px;
       border-radius:18px;
-      background:#fff;
-      border:1px solid #dbe8f7;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
       display:grid;
       place-items:center;
       overflow:hidden;
-      color:#8098b6;
+      color:#9eb3d3;
       flex:0 0 auto;
     }
 
@@ -436,11 +447,13 @@
     }
 
     .stat{
-      background:#fff;
       border:1px solid var(--line);
-      border-radius:20px;
+      border-radius:22px;
       padding:16px;
       box-shadow:var(--shadow);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
+        linear-gradient(180deg, rgba(10,18,32,.72), rgba(10,18,32,.82));
     }
 
     .stat strong{
@@ -455,22 +468,25 @@
     }
 
     .preview-shell{
-      background:linear-gradient(180deg,#fbfdff,#edf5ff);
       border:1px solid var(--line);
-      border-radius:28px;
+      border-radius:30px;
       padding:18px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
+        linear-gradient(180deg, rgba(10,18,32,.72), rgba(10,18,32,.82));
+      box-shadow:var(--shadow);
     }
 
     .review-art{
       position:relative;
       width:min(100%, 500px);
       margin:0 auto;
-      min-height:820px;
+      min-height:830px;
       border-radius:36px;
       overflow:hidden;
-      background:#dfeeff;
-      border:1px solid #d8e8ff;
-      box-shadow:0 24px 50px rgba(18,37,63,.12);
+      background:#20324f;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 24px 50px rgba(0,0,0,.24);
     }
 
     .review-bg{
@@ -478,15 +494,15 @@
       inset:0;
       background-size:cover;
       background-position:center;
-      filter:saturate(1.03);
+      filter:saturate(1.02);
     }
 
     .review-overlay{
       position:absolute;
       inset:0;
       background:
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(10,24,46,.25)),
-        linear-gradient(180deg, rgba(10,24,46,.06) 0%, rgba(10,24,46,.48) 100%);
+        linear-gradient(180deg, rgba(8,16,29,.18), rgba(8,16,29,.28)),
+        linear-gradient(180deg, rgba(8,16,29,.08) 0%, rgba(8,16,29,.55) 100%);
     }
 
     .review-top{
@@ -579,7 +595,7 @@
       line-height:1.02;
       letter-spacing:-.03em;
       margin:8px 0 8px;
-      max-width:370px;
+      max-width:380px;
       text-shadow:0 2px 18px rgba(0,0,0,.22);
     }
 
@@ -587,7 +603,7 @@
       color:#f0f6ff;
       font-size:15px;
       line-height:1.65;
-      max-width:370px;
+      max-width:380px;
       text-shadow:0 2px 14px rgba(0,0,0,.18);
     }
 
@@ -613,8 +629,8 @@
       text-align:center;
       font-size:12px;
       font-weight:800;
-      color:var(--brand-dark);
       letter-spacing:.04em;
+      color:#1f5dd7;
       margin-bottom:10px;
     }
 
@@ -677,7 +693,7 @@
 
     .preview-actions{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:1fr 1fr 1fr;
       gap:12px;
       margin-top:16px;
     }
@@ -714,11 +730,13 @@
       justify-content:space-between;
       gap:14px;
       flex-wrap:wrap;
-      background:#fff;
       border:1px solid var(--line);
       border-radius:24px;
       padding:18px 20px;
       box-shadow:var(--shadow);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
+        linear-gradient(180deg, rgba(10,18,32,.72), rgba(10,18,32,.82));
       color:var(--muted);
     }
 
@@ -751,7 +769,7 @@
           <div class="brand-badge">QR</div>
           <div class="brand-copy">
             <strong>Carpet Cleaner QR Studio</strong>
-            <span>Free tool for carpet cleaners to create review cards, website QR codes and lock screen wallpapers</span>
+            <span>Premium QR review cards, website QR codes and lock screen wallpapers</span>
           </div>
         </div>
 
@@ -767,10 +785,10 @@
       <div class="hero-card">
         <div class="hero-grid">
           <div>
-            <div class="eyebrow">Built properly for the carpet cleaning industry</div>
-            <h1>Create premium QR review cards and phone wallpapers that actually look finished</h1>
+            <div class="eyebrow">Premium carpet cleaning QR builder</div>
+            <h1>Create proper review cards and branded QR designs that look like a real product</h1>
             <p>
-              Upload your own carpet cleaning image, upload your logo, choose what the QR does, and download a proper review card or a lock screen wallpaper with the QR in the right place.
+              Upload your logo, upload your carpet cleaning background image, choose what the QR should do, generate it, then download a polished review card or lock screen wallpaper.
             </p>
             <div class="hero-actions">
               <button class="btn btn-primary" onclick="document.getElementById('studio').scrollIntoView({behavior:'smooth'})">Start building</button>
@@ -798,7 +816,7 @@
           <div class="panel">
             <div class="panel-head">
               <h2>Studio setup</h2>
-              <p>Everything is editable, including the thank you message, smaller message, logo, background image and QR destination.</p>
+              <p>This version adds a proper Generate QR button and fixes the logo upload preview.</p>
             </div>
 
             <div class="panel-body">
@@ -864,7 +882,7 @@
                 <input id="logoUpload" type="file" accept="image/*">
                 <div class="upload-preview">
                   <div class="thumb" id="logoThumb">No logo</div>
-                  <div class="tiny-note">This works on a static site by reading the file directly in your browser.</div>
+                  <div class="tiny-note">The preview updates after upload, and the logo is used in the final downloads.</div>
                 </div>
               </div>
 
@@ -873,7 +891,7 @@
                 <input id="heroUpload" type="file" accept="image/*">
                 <div class="upload-preview">
                   <div class="thumb" id="heroThumb">No image</div>
-                  <div class="tiny-note">Use a proper carpet cleaning photo here. This will be used behind the preview, review card and lock screen.</div>
+                  <div class="tiny-note">Use a strong carpet cleaning photo here. It will appear behind the live preview and exports.</div>
                 </div>
               </div>
 
@@ -903,17 +921,17 @@
               </div>
 
               <div class="actions-three">
-                <button class="btn btn-primary" onclick="updateAll()">Update preview</button>
-                <button class="btn btn-secondary" onclick="downloadQR()">Download QR only</button>
-                <button class="btn btn-secondary" onclick="downloadReviewCard()">Download review card</button>
+                <button class="btn btn-primary" id="generateBtn">Generate QR</button>
+                <button class="btn btn-secondary" id="downloadQrBtn">Download QR only</button>
+                <button class="btn btn-secondary" id="downloadCardBtn">Download review card</button>
               </div>
 
               <div class="actions-two" style="margin-top:12px;">
-                <button class="btn btn-gold" onclick="downloadLockscreen()">Download lock screen</button>
-                <button class="btn btn-secondary" onclick="resetExample()">Load example</button>
+                <button class="btn btn-gold" id="downloadLockBtn">Download lock screen</button>
+                <button class="btn btn-secondary" id="exampleBtn">Load example</button>
               </div>
 
-              <div class="status warn show" id="helpMsg">This creates a real static QR code. The code itself does not expire. The link behind it must stay live.</div>
+              <div class="status warn show" id="helpMsg">Generate the QR first, then download your card or lock screen.</div>
             </div>
           </div>
         </section>
@@ -921,68 +939,60 @@
         <section>
           <div class="stats">
             <div class="stat">
-              <strong>Real</strong>
-              <span>Proper static QR generation</span>
+              <strong>Premium</strong>
+              <span>Cleaner layout and darker luxury look</span>
             </div>
             <div class="stat">
               <strong>Working</strong>
-              <span>Uploads and exports included</span>
+              <span>Real Generate QR button and live preview</span>
             </div>
             <div class="stat">
               <strong>Branded</strong>
-              <span>Made for carpet cleaning</span>
+              <span>Logo, photo and business details included</span>
             </div>
           </div>
 
-          <div class="panel">
-            <div class="panel-head">
-              <h2>Live preview</h2>
-              <p>This preview uses a real image background and shows what the finished card will look like.</p>
-            </div>
+          <div class="preview-shell">
+            <div class="review-art">
+              <div class="review-bg" id="reviewBg"></div>
+              <div class="review-overlay"></div>
 
-            <div class="panel-body">
-              <div class="preview-shell">
-                <div class="review-art">
-                  <div class="review-bg" id="reviewBg"></div>
-                  <div class="review-overlay"></div>
-
-                  <div class="review-top">
-                    <div class="review-brand">
-                      <div class="review-badge" id="reviewBadge">
-                        <div class="wand-icon"></div>
-                      </div>
-                      <div class="review-company">
-                        <strong id="artCompanyName">Your Company Name</strong>
-                        <small id="artTagline">Professional carpet cleaning</small>
-                      </div>
-                    </div>
-
-                    <div class="review-title" id="artHeadline">Thanks for choosing us</div>
-                    <div class="review-sub" id="artSubline">If you were happy with the clean, please scan below and leave us a quick review.</div>
+              <div class="review-top">
+                <div class="review-brand">
+                  <div class="review-badge" id="reviewBadge">
+                    <div class="wand-icon"></div>
                   </div>
-
-                  <div class="review-mid">
-                    <div class="review-qr-card">
-                      <div class="qr-head" id="artQrLabel">SCAN TO LEAVE A REVIEW</div>
-                      <div class="qr-box">
-                        <canvas id="qrPreviewCanvas" width="500" height="500"></canvas>
-                      </div>
-                    </div>
-
-                    <div class="stars">★★★★★</div>
-                    <div class="bottom-copy" id="artBottomCopy">Your feedback really helps our business and helps other local customers choose us with confidence.</div>
-                    <div class="contact-pill" id="artContact">07802563213</div>
+                  <div class="review-company">
+                    <strong id="artCompanyName">Your Company Name</strong>
+                    <small id="artTagline">Professional carpet cleaning</small>
                   </div>
                 </div>
+
+                <div class="review-title" id="artHeadline">Thanks for choosing us</div>
+                <div class="review-sub" id="artSubline">If you were happy with the clean, please scan below and leave us a quick review.</div>
               </div>
 
-              <div class="preview-actions">
-                <button class="btn btn-primary" onclick="downloadReviewCard()">Download review card PNG</button>
-                <button class="btn btn-gold" onclick="downloadLockscreen()">Download phone lock screen PNG</button>
-              </div>
+              <div class="review-mid">
+                <div class="review-qr-card">
+                  <div class="qr-head" id="artQrLabel">SCAN TO LEAVE A REVIEW</div>
+                  <div class="qr-box">
+                    <canvas id="qrPreviewCanvas" width="500" height="500"></canvas>
+                  </div>
+                </div>
 
-              <div class="status ok" id="actionMsg"></div>
+                <div class="stars">★★★★★</div>
+                <div class="bottom-copy" id="artBottomCopy">Your feedback really helps our business and helps other local customers choose us with confidence.</div>
+                <div class="contact-pill" id="artContact">07802563213</div>
+              </div>
             </div>
+
+            <div class="preview-actions">
+              <button class="btn btn-primary" id="previewGenerateBtn">Generate QR</button>
+              <button class="btn btn-secondary" id="previewCardBtn">Download card</button>
+              <button class="btn btn-gold" id="previewLockBtn">Download lock screen</button>
+            </div>
+
+            <div class="status ok" id="actionMsg"></div>
           </div>
         </section>
 
@@ -994,7 +1004,7 @@
     <div class="container">
       <div class="footer-card">
         <div class="small">Carpet Cleaner QR Studio</div>
-        <div class="small">Free tool for carpet cleaners to create proper review cards and lock screen QR wallpapers</div>
+        <div class="small">Premium QR review cards, website links and branded lock screen wallpapers for carpet cleaning businesses</div>
       </div>
     </div>
   </footer>
@@ -1008,6 +1018,7 @@
     let qrTarget = "review";
     let uploadedLogo = null;
     let uploadedHero = null;
+    let qrReady = false;
     const defaultHero = "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1600&q=80";
 
     function getAccent(){
@@ -1032,11 +1043,10 @@
       el("facebookFieldWrap").style.display = target === "facebook" ? "" : "none";
       el("customFieldWrap").style.display = target === "custom" ? "" : "none";
 
-      updateLabel();
-      updateAll();
+      updateQrLabel();
     }
 
-    function updateLabel(){
+    function updateQrLabel(){
       const labels = {
         review: "SCAN TO LEAVE A REVIEW",
         website: "SCAN TO VISIT OUR WEBSITE",
@@ -1113,15 +1123,16 @@
       el("reviewBg").style.backgroundImage = `url("${src}")`;
     }
 
-    function buildQR(){
+    async function generateQR(){
       const text = getQRText();
 
       if (!text){
         showMessage("Add a valid link or some text first.", "warn");
+        qrReady = false;
         return false;
       }
 
-      QRCode.toCanvas(el("qrPreviewCanvas"), text, {
+      await QRCode.toCanvas(el("qrPreviewCanvas"), text, {
         width: 500,
         margin: 1,
         color: {
@@ -1130,16 +1141,17 @@
         }
       });
 
+      qrReady = true;
+      showMessage("QR generated.", "ok");
       return true;
     }
 
-    function updateAll(){
-      updateLabel();
+    function updateAllPreviewOnly(){
+      updateQrLabel();
       updateThumbs();
       updatePreviewText();
       updatePreviewBackground();
       renderBadgeHTML(el("reviewBadge"));
-      buildQR();
     }
 
     function showMessage(msg, type){
@@ -1159,8 +1171,11 @@
       a.click();
     }
 
-    function downloadQR(){
-      if (!buildQR()) return;
+    async function downloadQR(){
+      if (!qrReady){
+        const ok = await generateQR();
+        if (!ok) return;
+      }
       downloadDataUrl(el("qrPreviewCanvas").toDataURL("image/png"), "qr-code.png");
       showMessage("QR code downloaded.", "ok");
     }
@@ -1196,7 +1211,6 @@
           line = test;
         }
       }
-
       if (line.trim()) ctx.fillText(line.trim(), x, yy);
     }
 
@@ -1215,7 +1229,6 @@
           line = test;
         }
       }
-
       if (line.trim()) ctx.fillText(line.trim(), x, yy);
     }
 
@@ -1244,7 +1257,10 @@
     }
 
     async function renderDesign(canvas, mode){
-      if (!buildQR()) return false;
+      if (!qrReady){
+        const ok = await generateQR();
+        if (!ok) return false;
+      }
 
       const ctx = canvas.getContext("2d");
       const w = canvas.width;
@@ -1273,9 +1289,9 @@
       ctx.drawImage(heroImg, drawX, drawY, drawW, drawH);
 
       const overlay = ctx.createLinearGradient(0, 0, 0, h);
-      overlay.addColorStop(0, "rgba(18,37,63,0.20)");
-      overlay.addColorStop(.55, "rgba(18,37,63,0.36)");
-      overlay.addColorStop(1, "rgba(18,37,63,0.50)");
+      overlay.addColorStop(0, "rgba(8,16,29,0.24)");
+      overlay.addColorStop(.55, "rgba(8,16,29,0.38)");
+      overlay.addColorStop(1, "rgba(8,16,29,0.55)");
       ctx.fillStyle = overlay;
       ctx.fillRect(0, 0, w, h);
 
@@ -1307,7 +1323,7 @@
       const qrCardX = (w - qrCardW) / 2;
       const qrCardY = mode === "lock" ? h * 0.42 : h * 0.40;
 
-      ctx.shadowColor = "rgba(18,37,63,.26)";
+      ctx.shadowColor = "rgba(0,0,0,.28)";
       ctx.shadowBlur = 34;
       ctx.fillStyle = "rgba(255,255,255,.96)";
       roundRect(ctx, qrCardX, qrCardY, qrCardW, qrCardH, 42, true, false);
@@ -1357,23 +1373,6 @@
       return true;
     }
 
-    function showMessage(msg, type){
-      const box = el("actionMsg");
-      box.textContent = msg;
-      box.className = "status show " + (type === "warn" ? "warn" : "ok");
-      clearTimeout(window._msgTimer);
-      window._msgTimer = setTimeout(() => {
-        box.className = "status " + (type === "warn" ? "warn" : "ok");
-      }, 2200);
-    }
-
-    function downloadDataUrl(url, filename){
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-    }
-
     async function downloadReviewCard(){
       const canvas = el("exportCanvas");
       const ok = await renderDesign(canvas, "card");
@@ -1388,12 +1387,6 @@
       if (!ok) return;
       downloadDataUrl(canvas.toDataURL("image/png"), "lock-screen.png");
       showMessage("Lock screen downloaded.", "ok");
-    }
-
-    function downloadQR(){
-      if (!buildQR()) return;
-      downloadDataUrl(el("qrPreviewCanvas").toDataURL("image/png"), "qr-code.png");
-      showMessage("QR code downloaded.", "ok");
     }
 
     async function resetExample(){
@@ -1411,15 +1404,17 @@
       el("badgeMode").value = "wand";
       uploadedLogo = null;
       uploadedHero = null;
+      qrReady = false;
       setTarget("review");
-      updateAll();
+      updateAllPreviewOnly();
+      showMessage("Example loaded. Press Generate QR.", "ok");
     }
 
     el("logoUpload").addEventListener("change", async e => {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
       uploadedLogo = await readFileAsDataURL(file);
-      updateAll();
+      updateAllPreviewOnly();
       showMessage("Logo uploaded.", "ok");
     });
 
@@ -1427,7 +1422,7 @@
       const file = e.target.files && e.target.files[0];
       if (!file) return;
       uploadedHero = await readFileAsDataURL(file);
-      updateAll();
+      updateAllPreviewOnly();
       showMessage("Background image uploaded.", "ok");
     });
 
@@ -1449,9 +1444,18 @@
       "badgeMode",
       "bottomText"
     ].forEach(id => {
-      el(id).addEventListener("input", updateAll);
-      el(id).addEventListener("change", updateAll);
+      el(id).addEventListener("input", updateAllPreviewOnly);
+      el(id).addEventListener("change", updateAllPreviewOnly);
     });
+
+    el("generateBtn").addEventListener("click", generateQR);
+    el("previewGenerateBtn").addEventListener("click", generateQR);
+    el("downloadQrBtn").addEventListener("click", downloadQR);
+    el("downloadCardBtn").addEventListener("click", downloadReviewCard);
+    el("previewCardBtn").addEventListener("click", downloadReviewCard);
+    el("downloadLockBtn").addEventListener("click", downloadLockscreen);
+    el("previewLockBtn").addEventListener("click", downloadLockscreen);
+    el("exampleBtn").addEventListener("click", resetExample);
 
     window.addEventListener("load", resetExample);
   </script>
