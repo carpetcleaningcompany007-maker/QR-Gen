@@ -25,6 +25,8 @@
       --shadow:0 20px 50px rgba(0,0,0,.28);
       --radius:26px;
       --max:1380px;
+      --success:#19a35b;
+      --success-dark:#128046;
     }
 
     *{box-sizing:border-box}
@@ -119,6 +121,12 @@
       background:linear-gradient(135deg,#ffe08a,#f3c34d);
       color:#5a4200;
       box-shadow:0 16px 30px rgba(243,195,77,.18);
+    }
+
+    .btn-success{
+      background:linear-gradient(135deg,var(--success),var(--success-dark));
+      color:#fff;
+      box-shadow:0 16px 30px rgba(25,163,91,.20);
     }
 
     .hero{
@@ -685,6 +693,45 @@
       box-shadow:0 10px 24px rgba(18,37,63,.14);
     }
 
+    .live-link-wrap{
+      position:relative;
+      z-index:2;
+      display:flex;
+      justify-content:center;
+      margin-top:12px;
+    }
+
+    .live-link-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width:320px;
+      max-width:360px;
+      text-align:center;
+      background:linear-gradient(135deg,var(--brand),var(--brand-dark));
+      color:#fff;
+      border:1px solid rgba(255,255,255,.24);
+      border-radius:999px;
+      padding:15px 20px;
+      font-size:15px;
+      font-weight:800;
+      box-shadow:0 14px 28px rgba(31,93,215,.28);
+      transition:.18s ease;
+    }
+
+    .live-link-btn:hover{
+      transform:translateY(-1px);
+      filter:brightness(1.04);
+    }
+
+    .share-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+
     .preview-actions{
       display:grid;
       grid-template-columns:repeat(4,1fr);
@@ -693,7 +740,7 @@
     }
 
     .preview-actions.secondary-row{
-      grid-template-columns:1fr;
+      grid-template-columns:1fr 1fr;
       margin-top:12px;
     }
 
@@ -751,12 +798,12 @@
     @media (max-width:760px){
       .topbar-inner{flex-direction:column;align-items:flex-start}
       .hero-card{padding:24px}
-      .two,.three,.actions-two,.actions-three,.choice-grid,.stats,.preview-actions{grid-template-columns:1fr}
+      .two,.three,.actions-two,.actions-three,.choice-grid,.stats,.preview-actions,.preview-actions.secondary-row,.share-actions{grid-template-columns:1fr}
       .panel-head,.panel-body{padding-left:18px;padding-right:18px}
       .review-title{font-size:38px}
       .review-qr-card{width:292px}
       .hero-mini{width:220px}
-      .preview-actions.secondary-row{grid-template-columns:1fr}
+      .live-link-btn{min-width:unset;width:100%}
     }
   </style>
 </head>
@@ -769,7 +816,7 @@
           <div class="brand-badge">QR</div>
           <div class="brand-copy">
             <strong>Carpet Cleaner QR Studio</strong>
-            <span>Working QR builder with logo upload, review cards and lock screen exports</span>
+            <span>Working QR builder with logo upload, review cards, lock screen exports and share buttons</span>
           </div>
         </div>
       </div>
@@ -783,7 +830,7 @@
           <div>
             <div class="eyebrow">Working version</div>
             <h1>Create proper carpet cleaning QR cards and wallpapers</h1>
-            <p>Upload a logo, upload a carpet cleaning image, choose what the QR is for, generate it, then download the finished designs.</p>
+            <p>Upload a logo, upload a carpet cleaning image, choose what the QR is for, generate it, then download the finished designs or send the link straight to a customer.</p>
             <div class="hero-actions">
               <button class="btn btn-primary" onclick="document.getElementById('studio').scrollIntoView({behavior:'smooth'})">Go to studio</button>
             </div>
@@ -808,7 +855,7 @@
         <section class="panel">
           <div class="panel-head">
             <h2>Studio setup</h2>
-            <p>This version auto uses the uploaded logo, adds better wording, text colour options, clickable live buttons and stronger Google review emphasis.</p>
+            <p>This version adds cleaner customer wording, changing live button text, sharing, texting, and stronger Google review wording.</p>
           </div>
           <div class="panel-body">
 
@@ -836,7 +883,7 @@
 
             <div class="field">
               <label for="sublineText">Smaller message</label>
-              <textarea id="sublineText" placeholder="If you were happy with the clean, please scan below and leave us a quick review."></textarea>
+              <textarea id="sublineText" placeholder="If you were happy with the clean, please scan below or tap the button to leave us a quick review."></textarea>
             </div>
 
             <div class="field">
@@ -926,6 +973,11 @@
               <button class="btn btn-secondary" id="exampleBtn">Load example</button>
             </div>
 
+            <div class="share-actions">
+              <button class="btn btn-success" id="shareCustomerBtn">Share with customer</button>
+              <button class="btn btn-secondary" id="textCustomerBtn">Text customer</button>
+            </div>
+
             <div class="msg warn show" id="helpMsg">Press Generate QR after entering your chosen link.</div>
           </div>
         </section>
@@ -942,7 +994,7 @@
             </div>
             <div class="stat">
               <strong>Better</strong>
-              <span>Clickable live buttons and cleaner wording</span>
+              <span>Clickable live buttons plus share and text actions</span>
             </div>
           </div>
 
@@ -976,7 +1028,12 @@
 
                 <div class="stars" id="artStars">★★★★★</div>
                 <div class="bottom-copy" id="artBottomCopy">Your feedback really helps our business and helps other local customers choose us with confidence.</div>
-                <div class="contact-pill" id="artCtaButton">Tap below to open our Google review page</div>
+                <div class="contact-pill" id="artCtaButton">Welcome to our Google reviews</div>
+
+                <div class="live-link-wrap">
+                  <a href="#" target="_blank" rel="noopener" class="live-link-btn" id="liveActionLink">Open our Google review page</a>
+                </div>
+
                 <div class="contact-pill" id="artContact" style="margin-top:12px;">07802563213</div>
               </div>
             </div>
@@ -990,6 +1047,7 @@
 
             <div class="preview-actions secondary-row">
               <button class="btn btn-secondary" id="previewCardBtn">Download card</button>
+              <button class="btn btn-success" id="previewShareBtn">Share with customer</button>
             </div>
 
             <div class="msg ok" id="actionMsg"></div>
@@ -1004,7 +1062,7 @@
     <div class="container">
       <div class="footer-card">
         <div class="small">Carpet Cleaner QR Studio</div>
-        <div class="small">Working QR builder with logo upload, review cards and lock screen exports</div>
+        <div class="small">Working QR builder with logo upload, review cards, lock screen exports and customer share options</div>
       </div>
     </div>
   </footer>
@@ -1069,8 +1127,11 @@
           label: "SCAN TO LEAVE A REVIEW",
           heading: "Thanks for choosing us",
           sub: "If you were happy with the clean, please scan below or tap the button to leave us a quick Google review.",
-          bottom: "Our 5 star Google reviews really help our business and help other customers choose us with confidence.",
-          cta: "Tap below to open our Google review page"
+          bottom: "Thank you for choosing us. Your feedback really helps our business and helps other local customers choose us with confidence.",
+          cta: "Welcome to our Google reviews",
+          liveButton: "Open our Google review page",
+          shareTitle: "Leave us a Google review",
+          shareText: "Thank you for choosing us. We would really appreciate it if you could leave us a quick Google review here:"
         };
       }
 
@@ -1079,8 +1140,11 @@
           label: "SCAN TO VISIT OUR WEBSITE",
           heading: "Thanks for visiting us",
           sub: "Scan below or tap the button to visit our website and find out more about our services.",
-          bottom: "Take a look through our website to see more about our cleaning services and recent work.",
-          cta: "Tap below to open our website"
+          bottom: "Thank you for choosing us. Please take a look through our website to see more about our services and recent work.",
+          cta: "Visit our website",
+          liveButton: "Open our website",
+          shareTitle: "Take a look at our website",
+          shareText: "Thank you for choosing us. You can take a look at our website here:"
         };
       }
 
@@ -1089,8 +1153,11 @@
           label: "SCAN TO VIEW OUR FACEBOOK",
           heading: "Come and see our latest work",
           sub: "Scan below or tap the button to visit our Facebook page and see our recent results.",
-          bottom: "Follow our Facebook page to see updates, before and after results and customer feedback.",
-          cta: "Tap below to open our Facebook page"
+          bottom: "Thank you for choosing us. Follow our Facebook page to see updates, before and after results and customer feedback.",
+          cta: "Visit our Facebook page",
+          liveButton: "Open our Facebook page",
+          shareTitle: "View our Facebook page",
+          shareText: "Thank you for choosing us. You can view our Facebook page here:"
         };
       }
 
@@ -1098,8 +1165,11 @@
         label: "SCAN THE QR CODE",
         heading: "Thanks for choosing us",
         sub: "Scan below or tap the button to open the link.",
-        bottom: "Use the QR code or the button below to open the link directly.",
-        cta: "Tap below to open the link"
+        bottom: "Thank you for choosing us. Use the QR code or the button below to open the link directly.",
+        cta: "Open the link below",
+        liveButton: "Open link",
+        shareTitle: "Open this link",
+        shareText: "Thank you for choosing us. You can open the link here:"
       };
     }
 
@@ -1129,6 +1199,13 @@
       if (qrTarget === "facebook") return el("facebookLink").value.trim();
       if (qrTarget === "custom") return el("customLink").value.trim();
       return "";
+    }
+
+    function getShareMessage() {
+      const company = el("companyName").value.trim() || "Our business";
+      const meta = getTargetMeta();
+      const link = getQRText();
+      return `${meta.shareText}\n\n${link}\n\n${company}`;
     }
 
     function readFileAsDataURL(file) {
@@ -1185,6 +1262,24 @@
       }
     }
 
+    function updateLiveActionLink() {
+      const meta = getTargetMeta();
+      const link = getQRText();
+      const liveBtn = el("liveActionLink");
+
+      liveBtn.textContent = meta.liveButton;
+
+      if (link) {
+        liveBtn.href = link;
+        liveBtn.style.pointerEvents = "auto";
+        liveBtn.style.opacity = "1";
+      } else {
+        liveBtn.href = "#";
+        liveBtn.style.pointerEvents = "none";
+        liveBtn.style.opacity = ".7";
+      }
+    }
+
     function updatePreviewText() {
       const meta = getTargetMeta();
       const tc = getTextColors();
@@ -1228,6 +1323,7 @@
       updateThumbs();
       updatePreviewText();
       updatePreviewBackground();
+      updateLiveActionLink();
       renderBadgeHTML(el("reviewBadge"));
     }
 
@@ -1238,7 +1334,7 @@
       clearTimeout(window._msgTimer);
       window._msgTimer = setTimeout(() => {
         box.className = "msg " + (type === "warn" ? "warn" : "ok");
-      }, 2200);
+      }, 2400);
     }
 
     function generateQR() {
@@ -1261,6 +1357,7 @@
       });
 
       qrReady = true;
+      updateLiveActionLink();
       showMessage("QR generated.", "ok");
       return true;
     }
@@ -1303,6 +1400,50 @@
       } catch (err) {
         showMessage("Copy failed.", "warn");
       }
+    }
+
+    async function shareWithCustomer() {
+      const link = getQRText();
+      if (!link) {
+        showMessage("Add a valid link first.", "warn");
+        return;
+      }
+
+      const meta = getTargetMeta();
+      const message = getShareMessage();
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: meta.shareTitle,
+            text: message,
+            url: link
+          });
+          showMessage("Share opened.", "ok");
+          return;
+        } catch (err) {
+          if (err && err.name === "AbortError") return;
+        }
+      }
+
+      try {
+        await navigator.clipboard.writeText(message);
+        showMessage("Sharing not supported here. Message copied instead.", "ok");
+      } catch (err) {
+        showMessage("Share not available on this device.", "warn");
+      }
+    }
+
+    function textCustomer() {
+      const link = getQRText();
+      if (!link) {
+        showMessage("Add a valid link first.", "warn");
+        return;
+      }
+
+      const message = getShareMessage();
+      const smsUrl = "sms:?&body=" + encodeURIComponent(message);
+      window.location.href = smsUrl;
     }
 
     function roundRect(ctx, x, y, w, h, r, fill, stroke) {
@@ -1606,6 +1747,9 @@
     el("exampleBtn").addEventListener("click", loadExample);
     el("openLinkBtn").addEventListener("click", openCurrentLink);
     el("copyLinkBtn").addEventListener("click", copyCurrentLink);
+    el("shareCustomerBtn").addEventListener("click", shareWithCustomer);
+    el("previewShareBtn").addEventListener("click", shareWithCustomer);
+    el("textCustomerBtn").addEventListener("click", textCustomer);
 
     window.addEventListener("load", loadExample);
   </script>
