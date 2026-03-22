@@ -9,27 +9,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
 
   <style>
     :root{
-      --bg:#08101d;
-      --bg2:#0f1a2f;
-      --panel:rgba(255,255,255,.08);
-      --panel-solid:#ffffff;
-      --line:rgba(255,255,255,.10);
-      --line-light:#dfe8f5;
-      --text:#ecf3ff;
-      --text-dark:#14233c;
-      --muted:#a7bad7;
-      --muted-dark:#5c7391;
+      --bg:#0b1220;
+      --bg2:#111b31;
+      --panel:rgba(255,255,255,.06);
+      --panel-border:rgba(255,255,255,.12);
+      --text:#eef4ff;
+      --muted:#aabbd8;
       --brand:#2f7cf6;
       --brand-dark:#1f5dd7;
-      --gold:#f3c34d;
+      --gold:#f4c24d;
       --shadow:0 24px 60px rgba(0,0,0,.30);
-      --shadow-light:0 18px 45px rgba(20,35,60,.12);
       --radius:26px;
-      --max:1380px;
+      --max:1360px;
     }
 
     *{box-sizing:border-box}
@@ -39,16 +33,15 @@
       font-family:Inter,system-ui,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at top left, rgba(47,124,246,.16), transparent 22%),
-        radial-gradient(circle at bottom right, rgba(243,195,77,.10), transparent 25%),
-        linear-gradient(180deg, #08101d 0%, #0d1728 100%);
+        radial-gradient(circle at top left, rgba(47,124,246,.16), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(244,194,77,.10), transparent 26%),
+        linear-gradient(180deg,#0a1220 0%, #111b31 100%);
       min-height:100vh;
-      overflow-x:hidden;
     }
 
     a{text-decoration:none;color:inherit}
     img{max-width:100%;display:block}
-    .container{width:min(var(--max), calc(100% - 28px)); margin:0 auto}
+    .container{width:min(var(--max),calc(100% - 28px));margin:0 auto}
 
     .topbar{padding:18px 0 0}
     .topbar-inner{
@@ -56,19 +49,18 @@
       align-items:center;
       justify-content:space-between;
       gap:16px;
-      border:1px solid var(--line);
       background:rgba(255,255,255,.05);
-      backdrop-filter:blur(12px);
+      border:1px solid var(--panel-border);
       border-radius:22px;
       padding:14px 18px;
       box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
     }
 
     .brand{
       display:flex;
       align-items:center;
       gap:14px;
-      min-width:0;
     }
 
     .brand-badge{
@@ -81,21 +73,19 @@
       color:#fff;
       font-size:22px;
       font-weight:800;
-      box-shadow:0 14px 30px rgba(47,124,246,.28);
-      flex:0 0 auto;
+      box-shadow:0 14px 28px rgba(47,124,246,.24);
     }
 
     .brand-copy strong{
       display:block;
       font-size:15px;
-      line-height:1.1;
     }
 
     .brand-copy span{
       display:block;
       margin-top:4px;
-      color:var(--muted);
       font-size:12px;
+      color:var(--muted);
     }
 
     .btn{
@@ -113,41 +103,41 @@
     .btn:active{transform:translateY(0)}
 
     .btn-primary{
-      color:#fff;
       background:linear-gradient(135deg,var(--brand),var(--brand-dark));
-      box-shadow:0 16px 34px rgba(47,124,246,.24);
+      color:#fff;
+      box-shadow:0 16px 30px rgba(47,124,246,.22);
     }
 
     .btn-secondary{
-      color:#eef4ff;
       background:rgba(255,255,255,.06);
+      color:#eef4ff;
       border:1px solid rgba(255,255,255,.12);
     }
 
     .btn-gold{
-      color:#5d4200;
-      background:linear-gradient(135deg,#ffe08a,#f3c34d);
-      box-shadow:0 16px 34px rgba(243,195,77,.20);
+      background:linear-gradient(135deg,#ffe08a,#f4c24d);
+      color:#5a4200;
+      box-shadow:0 16px 30px rgba(244,194,77,.18);
     }
 
     .hero{
-      padding:22px 0 22px;
+      padding:22px 0;
     }
 
     .hero-card{
+      border:1px solid var(--panel-border);
+      border-radius:34px;
       overflow:hidden;
-      border:1px solid var(--line);
-      border-radius:36px;
       box-shadow:var(--shadow);
       background:
         linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
-        linear-gradient(180deg, rgba(11,19,34,.72), rgba(11,19,34,.82));
-      padding:38px;
+        linear-gradient(180deg, rgba(12,19,33,.72), rgba(12,19,33,.84));
+      padding:36px;
     }
 
     .hero-grid{
       display:grid;
-      grid-template-columns:1.08fr .92fr;
+      grid-template-columns:1.06fr .94fr;
       gap:28px;
       align-items:center;
     }
@@ -158,8 +148,8 @@
       gap:10px;
       padding:10px 14px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
       color:#dbe8ff;
       font-size:13px;
       font-weight:800;
@@ -171,7 +161,7 @@
       font-size:clamp(38px,5vw,72px);
       line-height:1.01;
       letter-spacing:-.05em;
-      max-width:800px;
+      max-width:780px;
     }
 
     .hero p{
@@ -195,8 +185,8 @@
       border-radius:30px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.12);
+      background:#20324f;
       box-shadow:var(--shadow);
-      background:#1a2942;
     }
 
     .hero-art::before{
@@ -204,11 +194,10 @@
       position:absolute;
       inset:0;
       background:
-        linear-gradient(180deg, rgba(9,16,29,.20), rgba(9,16,29,.38)),
+        linear-gradient(180deg, rgba(8,16,29,.16), rgba(8,16,29,.34)),
         url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1400&q=80");
       background-size:cover;
       background-position:center;
-      transform:scale(1.03);
     }
 
     .hero-mini{
@@ -216,11 +205,11 @@
       right:22px;
       bottom:22px;
       width:270px;
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(255,255,255,.75);
       border-radius:24px;
-      background:rgba(255,255,255,.93);
-      border:1px solid rgba(255,255,255,.7);
       padding:16px;
-      box-shadow:0 18px 36px rgba(15,23,42,.20);
+      box-shadow:0 18px 36px rgba(15,23,42,.22);
       z-index:2;
     }
 
@@ -228,8 +217,8 @@
       text-align:center;
       font-size:12px;
       font-weight:800;
-      letter-spacing:.04em;
       color:#1f5dd7;
+      letter-spacing:.04em;
       margin-bottom:10px;
     }
 
@@ -276,13 +265,13 @@
     }
 
     .panel{
-      border:1px solid var(--line);
+      border:1px solid var(--panel-border);
       border-radius:30px;
       overflow:hidden;
       box-shadow:var(--shadow);
       background:
         linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
-        linear-gradient(180deg, rgba(10,18,32,.72), rgba(10,18,32,.82));
+        linear-gradient(180deg, rgba(12,19,33,.72), rgba(12,19,33,.84));
     }
 
     .panel-head{
@@ -447,13 +436,13 @@
     }
 
     .stat{
-      border:1px solid var(--line);
+      border:1px solid var(--panel-border);
       border-radius:22px;
       padding:16px;
       box-shadow:var(--shadow);
       background:
         linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
-        linear-gradient(180deg, rgba(10,18,32,.72), rgba(10,18,32,.82));
+        linear-gradient(180deg, rgba(12,19,33,.72), rgba(12,19,33,.84));
     }
 
     .stat strong{
@@ -468,12 +457,12 @@
     }
 
     .preview-shell{
-      border:1px solid var(--line);
+      border:1px solid var(--panel-border);
       border-radius:30px;
       padding:18px;
       background:
         linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
-        linear-gradient(180deg, rgba(10,18,32,.72), rgba(10,18,32,.82));
+        linear-gradient(180deg, rgba(12,19,33,.72), rgba(12,19,33,.84));
       box-shadow:var(--shadow);
     }
 
@@ -730,13 +719,13 @@
       justify-content:space-between;
       gap:14px;
       flex-wrap:wrap;
-      border:1px solid var(--line);
+      border:1px solid var(--panel-border);
       border-radius:24px;
       padding:18px 20px;
       box-shadow:var(--shadow);
       background:
         linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)),
-        linear-gradient(180deg, rgba(10,18,32,.72), rgba(10,18,32,.82));
+        linear-gradient(180deg, rgba(12,19,33,.72), rgba(12,19,33,.84));
       color:var(--muted);
     }
 
@@ -769,12 +758,8 @@
           <div class="brand-badge">QR</div>
           <div class="brand-copy">
             <strong>Carpet Cleaner QR Studio</strong>
-            <span>Premium QR review cards, website QR codes and lock screen wallpapers</span>
+            <span>Premium QR review cards, website QR codes and branded lock screen wallpapers</span>
           </div>
-        </div>
-
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-secondary" onclick="document.getElementById('studio').scrollIntoView({behavior:'smooth'})">Go to studio</button>
         </div>
       </div>
     </div>
@@ -816,7 +801,7 @@
           <div class="panel">
             <div class="panel-head">
               <h2>Studio setup</h2>
-              <p>This version adds a proper Generate QR button and fixes the logo upload preview.</p>
+              <p>Logo upload and Generate QR are fixed in this version.</p>
             </div>
 
             <div class="panel-body">
@@ -882,7 +867,7 @@
                 <input id="logoUpload" type="file" accept="image/*">
                 <div class="upload-preview">
                   <div class="thumb" id="logoThumb">No logo</div>
-                  <div class="tiny-note">The preview updates after upload, and the logo is used in the final downloads.</div>
+                  <div class="tiny-note">After upload, your logo shows here and on the live preview.</div>
                 </div>
               </div>
 
@@ -891,7 +876,7 @@
                 <input id="heroUpload" type="file" accept="image/*">
                 <div class="upload-preview">
                   <div class="thumb" id="heroThumb">No image</div>
-                  <div class="tiny-note">Use a strong carpet cleaning photo here. It will appear behind the live preview and exports.</div>
+                  <div class="tiny-note">Use a carpet cleaning image here for the preview and exports.</div>
                 </div>
               </div>
 
@@ -931,7 +916,7 @@
                 <button class="btn btn-secondary" id="exampleBtn">Load example</button>
               </div>
 
-              <div class="status warn show" id="helpMsg">Generate the QR first, then download your card or lock screen.</div>
+              <div class="status warn show" id="helpMsg">Press Generate QR after entering the link you want to use.</div>
             </div>
           </div>
         </section>
@@ -940,15 +925,15 @@
           <div class="stats">
             <div class="stat">
               <strong>Premium</strong>
-              <span>Cleaner layout and darker luxury look</span>
+              <span>Luxury dark website style</span>
             </div>
             <div class="stat">
-              <strong>Working</strong>
-              <span>Real Generate QR button and live preview</span>
+              <strong>Fixed</strong>
+              <span>Generate QR and logo upload working</span>
             </div>
             <div class="stat">
               <strong>Branded</strong>
-              <span>Logo, photo and business details included</span>
+              <span>Background image, logo and details included</span>
             </div>
           </div>
 
@@ -1101,11 +1086,11 @@
 
     function updateThumbs(){
       el("logoThumb").innerHTML = uploadedLogo
-        ? `<img src="${uploadedLogo}" alt="Logo">`
+        ? '<img src="' + uploadedLogo + '" alt="Logo">'
         : "No logo";
 
       el("heroThumb").innerHTML = uploadedHero
-        ? `<img src="${uploadedHero}" alt="Background image">`
+        ? '<img src="' + uploadedHero + '" alt="Background image">'
         : "No image";
     }
 
@@ -1120,7 +1105,25 @@
 
     function updatePreviewBackground(){
       const src = uploadedHero || defaultHero;
-      el("reviewBg").style.backgroundImage = `url("${src}")`;
+      el("reviewBg").style.backgroundImage = 'url("' + src + '")';
+    }
+
+    function updateAllPreviewOnly(){
+      updateQrLabel();
+      updateThumbs();
+      updatePreviewText();
+      updatePreviewBackground();
+      renderBadgeHTML(el("reviewBadge"));
+    }
+
+    function showMessage(msg, type){
+      const box = el("actionMsg");
+      box.textContent = msg;
+      box.className = "status show " + (type === "warn" ? "warn" : "ok");
+      clearTimeout(window._msgTimer);
+      window._msgTimer = setTimeout(() => {
+        box.className = "status " + (type === "warn" ? "warn" : "ok");
+      }, 2200);
     }
 
     async function generateQR(){
@@ -1144,24 +1147,6 @@
       qrReady = true;
       showMessage("QR generated.", "ok");
       return true;
-    }
-
-    function updateAllPreviewOnly(){
-      updateQrLabel();
-      updateThumbs();
-      updatePreviewText();
-      updatePreviewBackground();
-      renderBadgeHTML(el("reviewBadge"));
-    }
-
-    function showMessage(msg, type){
-      const box = el("actionMsg");
-      box.textContent = msg;
-      box.className = "status show " + (type === "warn" ? "warn" : "ok");
-      clearTimeout(window._msgTimer);
-      window._msgTimer = setTimeout(() => {
-        box.className = "status " + (type === "warn" ? "warn" : "ok");
-      }, 2200);
     }
 
     function downloadDataUrl(url, filename){
@@ -1389,7 +1374,7 @@
       showMessage("Lock screen downloaded.", "ok");
     }
 
-    async function resetExample(){
+    function loadExample(){
       el("companyName").value = "The Carpet Cleaning Company";
       el("tagline").value = "Professional carpet and upholstery cleaning";
       el("phone").value = "07802563213";
@@ -1407,7 +1392,7 @@
       qrReady = false;
       setTarget("review");
       updateAllPreviewOnly();
-      showMessage("Example loaded. Press Generate QR.", "ok");
+      showMessage("Example loaded.", "ok");
     }
 
     el("logoUpload").addEventListener("change", async e => {
@@ -1455,9 +1440,9 @@
     el("previewCardBtn").addEventListener("click", downloadReviewCard);
     el("downloadLockBtn").addEventListener("click", downloadLockscreen);
     el("previewLockBtn").addEventListener("click", downloadLockscreen);
-    el("exampleBtn").addEventListener("click", resetExample);
+    el("exampleBtn").addEventListener("click", loadExample);
 
-    window.addEventListener("load", resetExample);
+    window.addEventListener("load", loadExample);
   </script>
 </body>
 </html>
