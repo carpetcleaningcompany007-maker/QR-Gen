@@ -479,8 +479,9 @@
     .review-art{
       position:relative;
       width:min(100%, 500px);
-      margin:0 auto;
+      aspect-ratio:500 / 880;
       min-height:880px;
+      margin:0 auto;
       border-radius:36px;
       overflow:hidden;
       background:#20324f;
@@ -800,10 +801,26 @@
       .hero-card{padding:24px}
       .two,.three,.actions-two,.actions-three,.choice-grid,.stats,.preview-actions,.preview-actions.secondary-row,.share-actions{grid-template-columns:1fr}
       .panel-head,.panel-body{padding-left:18px;padding-right:18px}
-      .review-title{font-size:38px}
-      .review-qr-card{width:292px}
+
+      .review-art{
+        width:min(100%, 500px);
+        aspect-ratio:500 / 880;
+        min-height:auto;
+      }
+
+      .review-title{font-size:48px}
+      .review-qr-card{width:340px}
       .hero-mini{width:220px}
-      .live-link-btn{min-width:unset;width:100%}
+      .live-link-btn{min-width:320px}
+    }
+
+    @media (max-width:420px){
+      .review-title{font-size:42px}
+      .review-sub{font-size:15px}
+      .review-qr-card{width:320px}
+      .contact-pill{max-width:330px}
+      .live-link-btn{min-width:300px;max-width:330px}
+      .bottom-copy{max-width:330px}
     }
   </style>
 </head>
@@ -816,7 +833,7 @@
           <div class="brand-badge">QR</div>
           <div class="brand-copy">
             <strong>Carpet Cleaner QR Studio</strong>
-            <span>Working QR builder with logo upload, review cards, lock screen exports and share buttons</span>
+            <span>Working QR builder with logo upload, matching preview layout, downloads and customer sharing</span>
           </div>
         </div>
       </div>
@@ -830,7 +847,7 @@
           <div>
             <div class="eyebrow">Working version</div>
             <h1>Create proper carpet cleaning QR cards and wallpapers</h1>
-            <p>Upload a logo, upload a carpet cleaning image, choose what the QR is for, generate it, then download the finished designs or send the link straight to a customer.</p>
+            <p>Upload a logo, upload a carpet cleaning image, choose what the QR is for, generate it, then download the finished designs or share the finished card with the customer.</p>
             <div class="hero-actions">
               <button class="btn btn-primary" onclick="document.getElementById('studio').scrollIntoView({behavior:'smooth'})">Go to studio</button>
             </div>
@@ -855,7 +872,7 @@
         <section class="panel">
           <div class="panel-head">
             <h2>Studio setup</h2>
-            <p>This version adds cleaner customer wording, changing live button text, sharing, texting, and stronger Google review wording.</p>
+            <p>This version keeps the mobile preview much closer to the web version, improves the review wording and can share the finished card image with the live link.</p>
           </div>
           <div class="panel-body">
 
@@ -883,7 +900,7 @@
 
             <div class="field">
               <label for="sublineText">Smaller message</label>
-              <textarea id="sublineText" placeholder="If you were happy with the clean, please scan below or tap the button to leave us a quick review."></textarea>
+              <textarea id="sublineText" placeholder="If you were happy with the clean, please scan below or tap the button to leave us a quick Google review."></textarea>
             </div>
 
             <div class="field">
@@ -994,12 +1011,12 @@
             </div>
             <div class="stat">
               <strong>Better</strong>
-              <span>Clickable live buttons plus share and text actions</span>
+              <span>Mobile layout matched much closer to web version</span>
             </div>
           </div>
 
           <div class="preview-shell">
-            <div class="review-art">
+            <div class="review-art" id="reviewArt">
               <div class="review-bg" id="reviewBg"></div>
               <div class="review-overlay"></div>
 
@@ -1028,7 +1045,7 @@
 
                 <div class="stars" id="artStars">★★★★★</div>
                 <div class="bottom-copy" id="artBottomCopy">Your feedback really helps our business and helps other local customers choose us with confidence.</div>
-                <div class="contact-pill" id="artCtaButton">Welcome to our Google reviews</div>
+                <div class="contact-pill" id="artCtaButton">Please give us a Google review</div>
 
                 <div class="live-link-wrap">
                   <a href="#" target="_blank" rel="noopener" class="live-link-btn" id="liveActionLink">Open our Google review page</a>
@@ -1062,13 +1079,14 @@
     <div class="container">
       <div class="footer-card">
         <div class="small">Carpet Cleaner QR Studio</div>
-        <div class="small">Working QR builder with logo upload, review cards, lock screen exports and customer share options</div>
+        <div class="small">Working QR builder with logo upload, matching preview layout, downloads and customer sharing</div>
       </div>
     </div>
   </footer>
 
   <canvas id="exportCanvas" width="1600" height="2200" style="display:none"></canvas>
   <canvas id="lockscreenCanvas" width="1290" height="2796" style="display:none"></canvas>
+  <canvas id="shareCardCanvas" width="1200" height="2112" style="display:none"></canvas>
 
   <script>
     const el = id => document.getElementById(id);
@@ -1128,10 +1146,10 @@
           heading: "Thanks for choosing us",
           sub: "If you were happy with the clean, please scan below or tap the button to leave us a quick Google review.",
           bottom: "Thank you for choosing us. Your feedback really helps our business and helps other local customers choose us with confidence.",
-          cta: "Welcome to our Google reviews",
+          cta: "Please give us a Google review",
           liveButton: "Open our Google review page",
           shareTitle: "Leave us a Google review",
-          shareText: "Thank you for choosing us. We would really appreciate it if you could leave us a quick Google review here:"
+          shareText: "Please give us a Google review. It really means a lot to us."
         };
       }
 
@@ -1143,8 +1161,8 @@
           bottom: "Thank you for choosing us. Please take a look through our website to see more about our services and recent work.",
           cta: "Visit our website",
           liveButton: "Open our website",
-          shareTitle: "Take a look at our website",
-          shareText: "Thank you for choosing us. You can take a look at our website here:"
+          shareTitle: "View our website",
+          shareText: "Take a look at our website here."
         };
       }
 
@@ -1157,7 +1175,7 @@
           cta: "Visit our Facebook page",
           liveButton: "Open our Facebook page",
           shareTitle: "View our Facebook page",
-          shareText: "Thank you for choosing us. You can view our Facebook page here:"
+          shareText: "Take a look at our Facebook page here."
         };
       }
 
@@ -1169,7 +1187,7 @@
         cta: "Open the link below",
         liveButton: "Open link",
         shareTitle: "Open this link",
-        shareText: "Thank you for choosing us. You can open the link here:"
+        shareText: "Open the link here."
       };
     }
 
@@ -1184,13 +1202,7 @@
       el("facebookFieldWrap").style.display = target === "facebook" ? "" : "none";
       el("customFieldWrap").style.display = target === "custom" ? "" : "none";
 
-      updateQrLabel();
       updateAllPreviewOnly();
-    }
-
-    function updateQrLabel() {
-      const meta = getTargetMeta();
-      el("artQrLabel").textContent = meta.label;
     }
 
     function getQRText() {
@@ -1225,6 +1237,10 @@
         img.onerror = reject;
         img.src = src;
       });
+    }
+
+    function blobFromCanvas(canvas) {
+      return new Promise(resolve => canvas.toBlob(resolve, "image/png"));
     }
 
     function renderBadgeHTML(container) {
@@ -1298,6 +1314,7 @@
       el("artBottomCopy").textContent = customBottom || meta.bottom;
       el("artCtaButton").textContent = meta.cta;
       el("artContact").textContent = el("phone").value.trim() || "07802563213";
+      el("artQrLabel").textContent = meta.label;
       el("artStars").textContent = qrTarget === "review" ? "★★★★★  5 STAR GOOGLE REVIEWS" : "★★★★★";
 
       el("artCompanyName").style.color = tc.main;
@@ -1319,7 +1336,6 @@
     }
 
     function updateAllPreviewOnly() {
-      updateQrLabel();
       updateThumbs();
       updatePreviewText();
       updatePreviewBackground();
@@ -1369,15 +1385,6 @@
       a.click();
     }
 
-    function downloadQR() {
-      if (!qrReady) {
-        const ok = generateQR();
-        if (!ok) return;
-      }
-      downloadDataUrl(el("qrPreviewCanvas").toDataURL("image/png"), "qr-code.png");
-      showMessage("QR code downloaded.", "ok");
-    }
-
     function openCurrentLink() {
       const text = getQRText();
       if (!text) {
@@ -1400,50 +1407,6 @@
       } catch (err) {
         showMessage("Copy failed.", "warn");
       }
-    }
-
-    async function shareWithCustomer() {
-      const link = getQRText();
-      if (!link) {
-        showMessage("Add a valid link first.", "warn");
-        return;
-      }
-
-      const meta = getTargetMeta();
-      const message = getShareMessage();
-
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: meta.shareTitle,
-            text: message,
-            url: link
-          });
-          showMessage("Share opened.", "ok");
-          return;
-        } catch (err) {
-          if (err && err.name === "AbortError") return;
-        }
-      }
-
-      try {
-        await navigator.clipboard.writeText(message);
-        showMessage("Sharing not supported here. Message copied instead.", "ok");
-      } catch (err) {
-        showMessage("Share not available on this device.", "warn");
-      }
-    }
-
-    function textCustomer() {
-      const link = getQRText();
-      if (!link) {
-        showMessage("Add a valid link first.", "warn");
-        return;
-      }
-
-      const message = getShareMessage();
-      const smsUrl = "sms:?&body=" + encodeURIComponent(message);
-      window.location.href = smsUrl;
     }
 
     function roundRect(ctx, x, y, w, h, r, fill, stroke) {
@@ -1478,6 +1441,7 @@
         }
       }
       if (line.trim()) ctx.fillText(line.trim(), x, yy);
+      return yy;
     }
 
     function drawWrappedTextCentered(ctx, text, x, y, maxWidth, lineHeight) {
@@ -1496,6 +1460,7 @@
         }
       }
       if (line.trim()) ctx.fillText(line.trim(), x, yy);
+      return yy;
     }
 
     async function drawBadgeOnCanvas(ctx, x, y, size) {
@@ -1570,25 +1535,49 @@
       ctx.textAlign = "left";
       ctx.textBaseline = "alphabetic";
       ctx.fillStyle = tc.main;
-      ctx.font = "800 54px Inter";
-      drawWrappedText(ctx, company, side + 138, safeTop + 46, w - side * 2 - 146, 60);
+      ctx.font = mode === "share" ? "800 42px Inter" : "800 54px Inter";
+      drawWrappedText(ctx, company, side + 138, safeTop + 46, w - side * 2 - 146, mode === "share" ? 48 : 60);
 
       ctx.fillStyle = tc.soft;
-      ctx.font = "500 28px Inter";
-      drawWrappedText(ctx, tagline, side + 138, safeTop + 92, w - side * 2 - 146, 34);
+      ctx.font = mode === "share" ? "500 22px Inter" : "500 28px Inter";
+      drawWrappedText(ctx, tagline, side + 138, safeTop + 88, w - side * 2 - 146, mode === "share" ? 28 : 34);
 
       ctx.fillStyle = tc.main;
-      ctx.font = mode === "lock" ? "700 86px Playfair Display" : "700 78px Playfair Display";
-      drawWrappedText(ctx, headline, side, safeTop + 200, w - side * 2, mode === "lock" ? 92 : 84);
+      if (mode === "lock") {
+        ctx.font = "700 86px Playfair Display";
+      } else if (mode === "share") {
+        ctx.font = "700 66px Playfair Display";
+      } else {
+        ctx.font = "700 78px Playfair Display";
+      }
+      drawWrappedText(ctx, headline, side, safeTop + (mode === "share" ? 170 : 200), w - side * 2, mode === "share" ? 72 : (mode === "lock" ? 92 : 84));
 
       ctx.fillStyle = tc.soft;
-      ctx.font = mode === "lock" ? "500 34px Inter" : "500 30px Inter";
-      drawWrappedText(ctx, subline, side, safeTop + 292, w - side * 2, mode === "lock" ? 44 : 38);
+      if (mode === "share") {
+        ctx.font = "500 26px Inter";
+      } else if (mode === "lock") {
+        ctx.font = "500 34px Inter";
+      } else {
+        ctx.font = "500 30px Inter";
+      }
+      drawWrappedText(ctx, subline, side, safeTop + (mode === "share" ? 250 : 292), w - side * 2, mode === "share" ? 34 : (mode === "lock" ? 44 : 38));
 
-      const qrCardW = mode === "lock" ? 690 : 760;
-      const qrCardH = mode === "lock" ? 760 : 840;
+      let qrCardW, qrCardH, qrCardY;
+      if (mode === "lock") {
+        qrCardW = 690;
+        qrCardH = 760;
+        qrCardY = h * 0.42;
+      } else if (mode === "share") {
+        qrCardW = 560;
+        qrCardH = 640;
+        qrCardY = h * 0.34;
+      } else {
+        qrCardW = 760;
+        qrCardH = 840;
+        qrCardY = h * 0.40;
+      }
+
       const qrCardX = (w - qrCardW) / 2;
-      const qrCardY = mode === "lock" ? h * 0.42 : h * 0.40;
 
       ctx.shadowColor = "rgba(0,0,0,.28)";
       ctx.shadowBlur = 34;
@@ -1602,12 +1591,22 @@
 
       ctx.textAlign = "center";
       ctx.fillStyle = accent.dark;
-      ctx.font = mode === "lock" ? "800 28px Inter" : "800 34px Inter";
-      ctx.fillText(meta.label, w / 2, qrCardY + 66);
+      if (mode === "share") {
+        ctx.font = "800 24px Inter";
+      } else if (mode === "lock") {
+        ctx.font = "800 28px Inter";
+      } else {
+        ctx.font = "800 34px Inter";
+      }
+      ctx.fillText(meta.label, w / 2, qrCardY + (mode === "share" ? 52 : 66));
 
-      const qrSize = mode === "lock" ? 500 : 560;
+      let qrSize;
+      if (mode === "lock") qrSize = 500;
+      else if (mode === "share") qrSize = 390;
+      else qrSize = 560;
+
       const qrX = (w - qrSize) / 2;
-      const qrY = qrCardY + 105;
+      const qrY = qrCardY + (mode === "share" ? 88 : 105);
 
       ctx.fillStyle = "#ffffff";
       ctx.strokeStyle = "#e5eef9";
@@ -1616,17 +1615,41 @@
       ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
       ctx.fillStyle = "#f5c84c";
-      ctx.font = mode === "lock" ? "800 44px Inter" : "800 50px Inter";
-      ctx.fillText(qrTarget === "review" ? "★★★★★  5 STAR GOOGLE REVIEWS" : "★★★★★", w / 2, qrY + qrSize + 110);
+      if (mode === "share") {
+        ctx.font = "800 34px Inter";
+      } else if (mode === "lock") {
+        ctx.font = "800 44px Inter";
+      } else {
+        ctx.font = "800 50px Inter";
+      }
+      ctx.fillText(qrTarget === "review" ? "★★★★★  5 STAR GOOGLE REVIEWS" : "★★★★★", w / 2, qrY + qrSize + (mode === "share" ? 86 : 110));
 
       ctx.fillStyle = tc.main;
-      ctx.font = mode === "lock" ? "500 32px Inter" : "500 34px Inter";
-      drawWrappedTextCentered(ctx, bottomText, w / 2, qrY + qrSize + 150, w * 0.72, mode === "lock" ? 42 : 44);
+      if (mode === "share") {
+        ctx.font = "500 25px Inter";
+      } else if (mode === "lock") {
+        ctx.font = "500 32px Inter";
+      } else {
+        ctx.font = "500 34px Inter";
+      }
+      drawWrappedTextCentered(ctx, bottomText, w / 2, qrY + qrSize + (mode === "share" ? 126 : 150), w * (mode === "share" ? 0.68 : 0.72), mode === "share" ? 32 : (mode === "lock" ? 42 : 44));
 
-      const ctaW = mode === "lock" ? 620 : 660;
-      const ctaH = mode === "lock" ? 78 : 86;
+      let ctaW, ctaH, ctaY;
+      if (mode === "lock") {
+        ctaW = 620;
+        ctaH = 78;
+        ctaY = h - 345;
+      } else if (mode === "share") {
+        ctaW = 520;
+        ctaH = 68;
+        ctaY = h - 290;
+      } else {
+        ctaW = 660;
+        ctaH = 86;
+        ctaY = h - 320;
+      }
+
       const ctaX = (w - ctaW) / 2;
-      const ctaY = h - (mode === "lock" ? 345 : 320);
 
       ctx.fillStyle = "rgba(255,255,255,.95)";
       ctx.strokeStyle = "rgba(255,255,255,.80)";
@@ -1634,13 +1657,57 @@
       roundRect(ctx, ctaX, ctaY, ctaW, ctaH, ctaH / 2, true, true);
 
       ctx.fillStyle = "#153055";
-      ctx.font = mode === "lock" ? "800 30px Inter" : "800 32px Inter";
-      ctx.fillText(meta.cta, w / 2, ctaY + ctaH / 2 + 10);
+      if (mode === "share") {
+        ctx.font = "800 26px Inter";
+      } else if (mode === "lock") {
+        ctx.font = "800 30px Inter";
+      } else {
+        ctx.font = "800 32px Inter";
+      }
+      ctx.fillText(meta.cta, w / 2, ctaY + ctaH / 2 + (mode === "share" ? 9 : 10));
 
-      const pillW = mode === "lock" ? 520 : 560;
-      const pillH = mode === "lock" ? 86 : 96;
+      let liveW, liveH, liveY;
+      if (mode === "share") {
+        liveW = 560;
+        liveH = 76;
+        liveY = h - 205;
+      } else {
+        liveW = 0;
+        liveH = 0;
+        liveY = 0;
+      }
+
+      if (mode === "share") {
+        const liveX = (w - liveW) / 2;
+        const grad = ctx.createLinearGradient(liveX, liveY, liveX + liveW, liveY + liveH);
+        grad.addColorStop(0, accent.main);
+        grad.addColorStop(1, accent.dark);
+        ctx.fillStyle = grad;
+        ctx.strokeStyle = "rgba(255,255,255,.24)";
+        ctx.lineWidth = 2;
+        roundRect(ctx, liveX, liveY, liveW, liveH, liveH / 2, true, true);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "800 27px Inter";
+        ctx.fillText(meta.liveButton, w / 2, liveY + liveH / 2 + 10);
+      }
+
+      let pillW, pillH, pillY;
+      if (mode === "lock") {
+        pillW = 520;
+        pillH = 86;
+        pillY = h - 240;
+      } else if (mode === "share") {
+        pillW = 420;
+        pillH = 72;
+        pillY = h - 108;
+      } else {
+        pillW = 560;
+        pillH = 96;
+        pillY = h - 210;
+      }
+
       const pillX = (w - pillW) / 2;
-      const pillY = h - (mode === "lock" ? 240 : 210);
 
       ctx.fillStyle = "rgba(255,255,255,.92)";
       ctx.strokeStyle = "rgba(255,255,255,.72)";
@@ -1648,20 +1715,32 @@
       roundRect(ctx, pillX, pillY, pillW, pillH, pillH / 2, true, true);
 
       ctx.fillStyle = "#153055";
-      ctx.font = mode === "lock" ? "800 40px Inter" : "800 44px Inter";
-      ctx.fillText(phone, w / 2, pillY + pillH / 2 + 14);
+      if (mode === "share") {
+        ctx.font = "800 34px Inter";
+      } else if (mode === "lock") {
+        ctx.font = "800 40px Inter";
+      } else {
+        ctx.font = "800 44px Inter";
+      }
+      ctx.fillText(phone, w / 2, pillY + pillH / 2 + (mode === "share" ? 11 : 14));
 
       return true;
+    }
+
+    function downloadQR() {
+      if (!qrReady) {
+        const ok = generateQR();
+        if (!ok) return;
+      }
+      downloadDataUrl(el("qrPreviewCanvas").toDataURL("image/png"), "qr-code.png");
+      showMessage("QR code downloaded.", "ok");
     }
 
     async function downloadReviewCard() {
       const canvas = el("exportCanvas");
       const ok = await renderDesign(canvas, "card");
       if (!ok) return;
-      const a = document.createElement("a");
-      a.href = canvas.toDataURL("image/png");
-      a.download = "review-card.png";
-      a.click();
+      downloadDataUrl(canvas.toDataURL("image/png"), "review-card.png");
       showMessage("Review card downloaded.", "ok");
     }
 
@@ -1669,11 +1748,72 @@
       const canvas = el("lockscreenCanvas");
       const ok = await renderDesign(canvas, "lock");
       if (!ok) return;
-      const a = document.createElement("a");
-      a.href = canvas.toDataURL("image/png");
-      a.download = "lock-screen.png";
-      a.click();
+      downloadDataUrl(canvas.toDataURL("image/png"), "lock-screen.png");
       showMessage("Lock screen downloaded.", "ok");
+    }
+
+    async function buildShareImageFile() {
+      const canvas = el("shareCardCanvas");
+      const ok = await renderDesign(canvas, "share");
+      if (!ok) return null;
+
+      const blob = await blobFromCanvas(canvas);
+      if (!blob) return null;
+
+      return new File([blob], "review-card-share.png", { type: "image/png" });
+    }
+
+    async function shareWithCustomer() {
+      const link = getQRText();
+      if (!link) {
+        showMessage("Add a valid link first.", "warn");
+        return;
+      }
+
+      const meta = getTargetMeta();
+      const message = getShareMessage();
+
+      try {
+        const file = await buildShareImageFile();
+
+        if (navigator.share && file) {
+          const shareData = {
+            title: meta.shareTitle,
+            text: message
+          };
+
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            shareData.files = [file];
+          } else {
+            shareData.url = link;
+          }
+
+          await navigator.share(shareData);
+          showMessage("Share opened.", "ok");
+          return;
+        }
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(message);
+        showMessage("Sharing not supported here. Message copied instead.", "ok");
+      } catch (err) {
+        showMessage("Share not available on this device.", "warn");
+      }
+    }
+
+    function textCustomer() {
+      const link = getQRText();
+      if (!link) {
+        showMessage("Add a valid link first.", "warn");
+        return;
+      }
+
+      const message = getShareMessage();
+      const smsUrl = "sms:?&body=" + encodeURIComponent(message);
+      window.location.href = smsUrl;
     }
 
     function loadExample() {
