@@ -14,7 +14,7 @@
   <style>
     :root{
       --bg:#0b1220;
-      --bg2:#13203a;
+      --bg2:#111b31;
       --panel:rgba(255,255,255,.07);
       --panel-border:rgba(255,255,255,.12);
       --text:#eef4ff;
@@ -800,7 +800,7 @@
         <section class="panel">
           <div class="panel-head">
             <h2>Studio setup</h2>
-            <p>This version uses a simpler QR library and a cleaner logo upload flow.</p>
+            <p>This version auto uses the uploaded logo on the preview and exports.</p>
           </div>
           <div class="panel-body">
 
@@ -866,7 +866,7 @@
               <input id="logoUpload" type="file" accept="image/*">
               <div class="upload-preview">
                 <div class="thumb" id="logoThumb">No logo</div>
-                <div class="tiny-note">Your uploaded logo should appear here straight away.</div>
+                <div class="tiny-note">Your uploaded logo should appear here straight away and on the preview card.</div>
               </div>
             </div>
 
@@ -879,7 +879,7 @@
               </div>
             </div>
 
-            <div class="three">
+            <div class="two">
               <div class="field">
                 <label for="accentColor">Accent colour</label>
                 <select id="accentColor">
@@ -887,14 +887,6 @@
                   <option value="gold">Gold</option>
                   <option value="emerald">Emerald</option>
                   <option value="violet">Violet</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="badgeMode">Badge style</label>
-                <select id="badgeMode">
-                  <option value="logo" selected>Uploaded logo</option>
-                  <option value="wand">Carpet wand icon</option>
                 </select>
               </div>
 
@@ -930,12 +922,12 @@
               <span>Logo upload fixed</span>
             </div>
             <div class="stat">
-              <strong>Premium</strong>
-              <span>Luxury dark design</span>
+              <strong>Auto</strong>
+              <span>Uploaded logo used automatically</span>
             </div>
           </div>
 
-          <div class="preview-wrap">
+          <div class="preview-shell">
             <div class="review-art">
               <div class="review-bg" id="reviewBg"></div>
               <div class="review-overlay"></div>
@@ -1002,7 +994,6 @@
     let uploadedLogo = null;
     let uploadedHero = null;
     let qrReady = false;
-    let qrValue = "";
 
     const defaultHero = "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1600&q=80";
 
@@ -1070,10 +1061,15 @@
     function renderBadgeHTML(container) {
       container.innerHTML = "";
 
-      if (el("badgeMode").value === "logo" && uploadedLogo) {
+      if (uploadedLogo) {
         const img = document.createElement("img");
         img.src = uploadedLogo;
         img.alt = "Logo";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "contain";
+        img.style.display = "block";
+        img.style.background = "#fff";
         container.appendChild(img);
         return;
       }
@@ -1137,8 +1133,6 @@
         showMessage("Add a valid link or text first.", "warn");
         return false;
       }
-
-      qrValue = text;
 
       new QRious({
         element: el("qrPreviewCanvas"),
@@ -1229,7 +1223,7 @@
       ctx.lineWidth = 2;
       roundRect(ctx, x, y, size, size, 22, true, true);
 
-      if (el("badgeMode").value === "logo" && uploadedLogo) {
+      if (uploadedLogo) {
         const img = await loadImage(uploadedLogo);
         ctx.drawImage(img, x + 10, y + 10, size - 20, size - 20);
         return;
@@ -1396,8 +1390,6 @@
       el("facebookLink").value = "https://www.facebook.com";
       el("customLink").value = "Thank you for choosing us";
       el("bottomText").value = "Your feedback really helps our business and helps other local customers choose us with confidence.";
-      el("accentColor").value = "blue";
-      el("badgeMode").value = "wand";
       uploadedLogo = null;
       uploadedHero = null;
       qrReady = false;
@@ -1439,7 +1431,6 @@
       "facebookLink",
       "customLink",
       "accentColor",
-      "badgeMode",
       "bottomText"
     ].forEach(id => {
       el(id).addEventListener("input", updateAllPreviewOnly);
