@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <style>
     :root{
@@ -809,6 +810,16 @@
       line-height:1.55;
     }
 
+    .capture-mode .review-overlay{
+      pointer-events:none !important;
+    }
+
+    .capture-mode #artCtaButtonLink,
+    .capture-mode #liveActionLink,
+    .capture-mode #artContactLink{
+      text-decoration:none !important;
+    }
+
     @media (max-width:1060px){
       .hero-grid,.main-grid{grid-template-columns:1fr}
     }
@@ -831,7 +842,7 @@
           <div class="brand-badge">QR</div>
           <div class="brand-copy">
             <strong>Carpet Cleaner QR Studio</strong>
-            <span>Working QR builder with logo upload, matching mobile preview and live clickable links</span>
+            <span>Working QR builder with live preview export</span>
           </div>
         </div>
       </div>
@@ -845,7 +856,7 @@
           <div>
             <div class="eyebrow">Working version</div>
             <h1>Create proper carpet cleaning QR cards and wallpapers</h1>
-            <p>Upload a logo, upload a carpet cleaning image, choose what the QR is for, generate it, then download the finished designs or share the finished card with the customer.</p>
+            <p>Upload a logo, upload a carpet cleaning image, choose what the QR is for, generate it, then download the actual live preview design.</p>
             <div class="hero-actions">
               <button class="btn btn-primary" onclick="document.getElementById('studio').scrollIntoView({behavior:'smooth'})">Go to studio</button>
             </div>
@@ -870,7 +881,7 @@
         <section class="panel">
           <div class="panel-head">
             <h2>Studio setup</h2>
-            <p>This version fixes the mobile card scaling and makes the live buttons actually clickable on the page.</p>
+            <p>This version downloads the actual preview instead of rebuilding a different version in canvas.</p>
           </div>
           <div class="panel-body">
 
@@ -936,16 +947,16 @@
               <input id="logoUpload" type="file" accept="image/*">
               <div class="upload-preview">
                 <div class="thumb" id="logoThumb">No logo</div>
-                <div class="tiny-note">Your uploaded logo should appear here straight away and on the preview card.</div>
+                <div class="tiny-note">Your uploaded logo appears on the live preview and export.</div>
               </div>
             </div>
 
             <div class="upload-box field">
-              <label for="heroUpload">Upload carpet cleaning background image</label>
+              <label for="heroUpload">Upload background image</label>
               <input id="heroUpload" type="file" accept="image/*">
               <div class="upload-preview">
                 <div class="thumb" id="heroThumb">No image</div>
-                <div class="tiny-note">This image will be used behind the live preview and exports.</div>
+                <div class="tiny-note">This image is used behind the live preview and export.</div>
               </div>
             </div>
 
@@ -1001,15 +1012,15 @@
           <div class="stats">
             <div class="stat">
               <strong>Working</strong>
-              <span>Preview scales properly</span>
+              <span>Preview export</span>
             </div>
             <div class="stat">
               <strong>Working</strong>
-              <span>Logo upload fixed</span>
+              <span>Logo upload</span>
             </div>
             <div class="stat">
               <strong>Working</strong>
-              <span>Live buttons clickable</span>
+              <span>Live links on page</span>
             </div>
           </div>
 
@@ -1086,14 +1097,10 @@
     <div class="container">
       <div class="footer-card">
         <div class="small">Carpet Cleaner QR Studio</div>
-        <div class="small">Working QR builder with logo upload, proper mobile scaling and live clickable links</div>
+        <div class="small">Downloads now come from the actual live preview</div>
       </div>
     </div>
   </footer>
-
-  <canvas id="exportCanvas" width="1600" height="2200" style="display:none"></canvas>
-  <canvas id="lockscreenCanvas" width="1290" height="2796" style="display:none"></canvas>
-  <canvas id="shareCardCanvas" width="1200" height="2112" style="display:none"></canvas>
 
   <script>
     const el = id => document.getElementById(id);
@@ -1218,18 +1225,16 @@
       });
     }
 
-    function loadImage(src) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => resolve(img);
-        img.onerror = reject;
-        img.src = src;
-      });
-    }
-
-    function blobFromCanvas(canvas) {
-      return new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+    function dataUrlToBlob(dataUrl) {
+      const parts = dataUrl.split(',');
+      const mime = parts[0].match(/:(.*?);/)[1];
+      const binary = atob(parts[1]);
+      let n = binary.length;
+      const u8arr = new Uint8Array(n);
+      while(n--){
+        u8arr[n] = binary.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
     }
 
     function renderBadgeHTML(container) {
@@ -1420,273 +1425,30 @@
       }
     }
 
-    function roundRect(ctx, x, y, w, h, r, fill, stroke) {
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x + r, y + h);
-      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-      ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
-      ctx.closePath();
-      if (fill) ctx.fill();
-      if (stroke) ctx.stroke();
-    }
-
-    function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
-      const words = (text || "").split(" ");
-      let line = "";
-      let yy = y;
-
-      for (let i = 0; i < words.length; i++) {
-        const test = line + words[i] + " ";
-        if (ctx.measureText(test).width > maxWidth && i > 0) {
-          ctx.fillText(line.trim(), x, yy);
-          line = words[i] + " ";
-          yy += lineHeight;
-        } else {
-          line = test;
-        }
-      }
-      if (line.trim()) ctx.fillText(line.trim(), x, yy);
-    }
-
-    function drawWrappedTextCentered(ctx, text, x, y, maxWidth, lineHeight) {
-      const words = (text || "").split(" ");
-      let line = "";
-      let yy = y;
-
-      for (let i = 0; i < words.length; i++) {
-        const test = line + words[i] + " ";
-        if (ctx.measureText(test).width > maxWidth && i > 0) {
-          ctx.fillText(line.trim(), x, yy);
-          line = words[i] + " ";
-          yy += lineHeight;
-        } else {
-          line = test;
-        }
-      }
-      if (line.trim()) ctx.fillText(line.trim(), x, yy);
-    }
-
-    async function drawBadgeOnCanvas(ctx, x, y, size) {
-      ctx.fillStyle = "rgba(255,255,255,.92)";
-      ctx.strokeStyle = "rgba(255,255,255,.72)";
-      ctx.lineWidth = 2;
-      roundRect(ctx, x, y, size, size, 22, true, true);
-
-      if (uploadedLogo) {
-        const img = await loadImage(uploadedLogo);
-        ctx.drawImage(img, x + 10, y + 10, size - 20, size - 20);
-        return;
-      }
-
-      ctx.strokeStyle = "#23446f";
-      ctx.lineWidth = 10;
-      ctx.lineCap = "round";
-      ctx.beginPath();
-      ctx.moveTo(x + 44, y + 16);
-      ctx.lineTo(x + 56, y + 54);
-      ctx.stroke();
-
-      ctx.fillStyle = "#6ea4ef";
-      roundRect(ctx, x + 22, y + 52, 42, 14, 8, true, false);
-    }
-
-    async function renderDesign(canvas, mode) {
+    async function exportPreview(scale = 3, backgroundColor = null) {
       if (!qrReady) {
         const ok = generateQR();
-        if (!ok) return false;
+        if (!ok) return null;
       }
 
-      const ctx = canvas.getContext("2d");
-      const w = canvas.width;
-      const h = canvas.height;
-      const accent = getAccent();
-      const tc = getTextColors();
-      const heroSrc = uploadedHero || defaultHero;
-      const meta = getTargetMeta();
+      const target = el("previewPhone");
+      target.classList.add("capture-mode");
 
-      const company = el("companyName").value.trim() || "Your Company Name";
-      const tagline = el("tagline").value.trim() || "Professional carpet cleaning";
-      const headline = el("headlineText").value.trim() || meta.heading;
-      const subline = el("sublineText").value.trim() || meta.sub;
-      const bottomText = el("bottomText").value.trim() || meta.bottom;
-      const phone = el("phone").value.trim() || "07802563213";
-
-      const heroImg = await loadImage(heroSrc);
-      const qrImg = await loadImage(el("qrPreviewCanvas").toDataURL("image/png"));
-
-      ctx.clearRect(0, 0, w, h);
-
-      const scale = Math.max(w / heroImg.width, h / heroImg.height);
-      const drawW = heroImg.width * scale;
-      const drawH = heroImg.height * scale;
-      const drawX = (w - drawW) / 2;
-      const drawY = (h - drawH) / 2;
-      ctx.drawImage(heroImg, drawX, drawY, drawW, drawH);
-
-      const overlay = ctx.createLinearGradient(0, 0, 0, h);
-      overlay.addColorStop(0, "rgba(8,16,29,0.24)");
-      overlay.addColorStop(.55, "rgba(8,16,29,0.38)");
-      overlay.addColorStop(1, "rgba(8,16,29,0.55)");
-      ctx.fillStyle = overlay;
-      ctx.fillRect(0, 0, w, h);
-
-      const safeTop = mode === "lock" ? 180 : 90;
-      const side = mode === "lock" ? 88 : 78;
-
-      await drawBadgeOnCanvas(ctx, side, safeTop, 112);
-
-      ctx.textAlign = "left";
-      ctx.textBaseline = "alphabetic";
-      ctx.fillStyle = tc.main;
-      ctx.font = mode === "share" ? "800 42px Inter" : "800 54px Inter";
-      drawWrappedText(ctx, company, side + 138, safeTop + 46, w - side * 2 - 146, mode === "share" ? 48 : 60);
-
-      ctx.fillStyle = tc.soft;
-      ctx.font = mode === "share" ? "500 22px Inter" : "500 28px Inter";
-      drawWrappedText(ctx, tagline, side + 138, safeTop + 88, w - side * 2 - 146, mode === "share" ? 28 : 34);
-
-      ctx.fillStyle = tc.main;
-      if (mode === "lock") ctx.font = "700 86px Playfair Display";
-      else if (mode === "share") ctx.font = "700 66px Playfair Display";
-      else ctx.font = "700 78px Playfair Display";
-
-      drawWrappedText(ctx, headline, side, safeTop + (mode === "share" ? 170 : 200), w - side * 2, mode === "share" ? 72 : (mode === "lock" ? 92 : 84));
-
-      ctx.fillStyle = tc.soft;
-      if (mode === "share") ctx.font = "500 26px Inter";
-      else if (mode === "lock") ctx.font = "500 34px Inter";
-      else ctx.font = "500 30px Inter";
-
-      drawWrappedText(ctx, subline, side, safeTop + (mode === "share" ? 250 : 292), w - side * 2, mode === "share" ? 34 : (mode === "lock" ? 44 : 38));
-
-      let qrCardW, qrCardH, qrCardY;
-      if (mode === "lock") {
-        qrCardW = 690; qrCardH = 760; qrCardY = h * 0.42;
-      } else if (mode === "share") {
-        qrCardW = 560; qrCardH = 640; qrCardY = h * 0.34;
-      } else {
-        qrCardW = 760; qrCardH = 840; qrCardY = h * 0.40;
+      try {
+        const canvas = await html2canvas(target, {
+          scale,
+          useCORS: true,
+          allowTaint: false,
+          backgroundColor,
+          logging: false
+        });
+        return canvas;
+      } finally {
+        target.classList.remove("capture-mode");
       }
-
-      const qrCardX = (w - qrCardW) / 2;
-
-      ctx.shadowColor = "rgba(0,0,0,.28)";
-      ctx.shadowBlur = 34;
-      ctx.fillStyle = "rgba(255,255,255,.96)";
-      roundRect(ctx, qrCardX, qrCardY, qrCardW, qrCardH, 42, true, false);
-      ctx.shadowBlur = 0;
-
-      ctx.strokeStyle = "rgba(255,255,255,.72)";
-      ctx.lineWidth = 2;
-      roundRect(ctx, qrCardX, qrCardY, qrCardW, qrCardH, 42, false, true);
-
-      ctx.textAlign = "center";
-      ctx.fillStyle = accent.dark;
-      if (mode === "share") ctx.font = "800 24px Inter";
-      else if (mode === "lock") ctx.font = "800 28px Inter";
-      else ctx.font = "800 34px Inter";
-
-      ctx.fillText(meta.label, w / 2, qrCardY + (mode === "share" ? 52 : 66));
-
-      let qrSize;
-      if (mode === "lock") qrSize = 500;
-      else if (mode === "share") qrSize = 390;
-      else qrSize = 560;
-
-      const qrX = (w - qrSize) / 2;
-      const qrY = qrCardY + (mode === "share" ? 88 : 105);
-
-      ctx.fillStyle = "#ffffff";
-      ctx.strokeStyle = "#e5eef9";
-      ctx.lineWidth = 2;
-      roundRect(ctx, qrX - 20, qrY - 20, qrSize + 40, qrSize + 40, 28, true, true);
-      ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
-
-      ctx.fillStyle = "#f5c84c";
-      if (mode === "share") ctx.font = "800 34px Inter";
-      else if (mode === "lock") ctx.font = "800 44px Inter";
-      else ctx.font = "800 50px Inter";
-
-      ctx.fillText(qrTarget === "review" ? "★★★★★  5 STAR GOOGLE REVIEWS" : "★★★★★", w / 2, qrY + qrSize + (mode === "share" ? 86 : 110));
-
-      ctx.fillStyle = tc.main;
-      if (mode === "share") ctx.font = "500 25px Inter";
-      else if (mode === "lock") ctx.font = "500 32px Inter";
-      else ctx.font = "500 34px Inter";
-
-      drawWrappedTextCentered(ctx, bottomText, w / 2, qrY + qrSize + (mode === "share" ? 126 : 150), w * (mode === "share" ? 0.68 : 0.72), mode === "share" ? 32 : (mode === "lock" ? 42 : 44));
-
-      let ctaW, ctaH, ctaY;
-      if (mode === "lock") {
-        ctaW = 620; ctaH = 78; ctaY = h - 345;
-      } else if (mode === "share") {
-        ctaW = 520; ctaH = 68; ctaY = h - 290;
-      } else {
-        ctaW = 660; ctaH = 86; ctaY = h - 320;
-      }
-
-      const ctaX = (w - ctaW) / 2;
-      ctx.fillStyle = "rgba(255,255,255,.95)";
-      ctx.strokeStyle = "rgba(255,255,255,.80)";
-      ctx.lineWidth = 2;
-      roundRect(ctx, ctaX, ctaY, ctaW, ctaH, ctaH / 2, true, true);
-
-      ctx.fillStyle = "#153055";
-      if (mode === "share") ctx.font = "800 26px Inter";
-      else if (mode === "lock") ctx.font = "800 30px Inter";
-      else ctx.font = "800 32px Inter";
-      ctx.fillText(meta.cta, w / 2, ctaY + ctaH / 2 + (mode === "share" ? 9 : 10));
-
-      if (mode === "share") {
-        const liveW = 560;
-        const liveH = 76;
-        const liveY = h - 205;
-        const liveX = (w - liveW) / 2;
-
-        const grad = ctx.createLinearGradient(liveX, liveY, liveX + liveW, liveY + liveH);
-        grad.addColorStop(0, accent.main);
-        grad.addColorStop(1, accent.dark);
-        ctx.fillStyle = grad;
-        ctx.strokeStyle = "rgba(255,255,255,.24)";
-        ctx.lineWidth = 2;
-        roundRect(ctx, liveX, liveY, liveW, liveH, liveH / 2, true, true);
-
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "800 27px Inter";
-        ctx.fillText(meta.liveButton, w / 2, liveY + liveH / 2 + 10);
-      }
-
-      let pillW, pillH, pillY;
-      if (mode === "lock") {
-        pillW = 520; pillH = 86; pillY = h - 240;
-      } else if (mode === "share") {
-        pillW = 420; pillH = 72; pillY = h - 108;
-      } else {
-        pillW = 560; pillH = 96; pillY = h - 210;
-      }
-
-      const pillX = (w - pillW) / 2;
-      ctx.fillStyle = "rgba(255,255,255,.92)";
-      ctx.strokeStyle = "rgba(255,255,255,.72)";
-      ctx.lineWidth = 2;
-      roundRect(ctx, pillX, pillY, pillW, pillH, pillH / 2, true, true);
-
-      ctx.fillStyle = "#153055";
-      if (mode === "share") ctx.font = "800 34px Inter";
-      else if (mode === "lock") ctx.font = "800 40px Inter";
-      else ctx.font = "800 44px Inter";
-      ctx.fillText(phone, w / 2, pillY + pillH / 2 + (mode === "share" ? 11 : 14));
-
-      return true;
     }
 
-    function downloadQR() {
+    async function downloadQR() {
       if (!qrReady) {
         const ok = generateQR();
         if (!ok) return;
@@ -1696,29 +1458,23 @@
     }
 
     async function downloadReviewCard() {
-      const canvas = el("exportCanvas");
-      const ok = await renderDesign(canvas, "card");
-      if (!ok) return;
+      const canvas = await exportPreview(3, null);
+      if (!canvas) return;
       downloadDataUrl(canvas.toDataURL("image/png"), "review-card.png");
       showMessage("Review card downloaded.", "ok");
     }
 
     async function downloadLockscreen() {
-      const canvas = el("lockscreenCanvas");
-      const ok = await renderDesign(canvas, "lock");
-      if (!ok) return;
+      const canvas = await exportPreview(4, null);
+      if (!canvas) return;
       downloadDataUrl(canvas.toDataURL("image/png"), "lock-screen.png");
       showMessage("Lock screen downloaded.", "ok");
     }
 
     async function buildShareImageFile() {
-      const canvas = el("shareCardCanvas");
-      const ok = await renderDesign(canvas, "share");
-      if (!ok) return null;
-
-      const blob = await blobFromCanvas(canvas);
-      if (!blob) return null;
-
+      const canvas = await exportPreview(3, null);
+      if (!canvas) return null;
+      const blob = dataUrlToBlob(canvas.toDataURL("image/png"));
       return new File([blob], "review-card-share.png", { type: "image/png" });
     }
 
